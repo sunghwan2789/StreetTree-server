@@ -1,0 +1,10 @@
+# Local configuration.
+/.env
+
+# composer files/dirs
+/vendor
+/composer.phar
+
+# node directory and yarn log
+/node_modules
+/yarn-error.log
