@@ -23,4 +23,4 @@ RUN apk update && \
     php7-xmlwriter \
     php7-zip
 
-RUN apk add shadow && useradd -r -m -s /usr/sbin/nologin -u 1000 www-data
+USER nobody

@@ -24,8 +24,11 @@ services:
       - db
     volumes:
       - .:/srv
-    user: '1000'
     working_dir: /srv
+    environment:
+      HOME: /srv
+      COMPOSER_HOME: /srv/.composer
+      YARN_CACHE_FOLDER: /srv/.yarn
     command: ./docker/php/start
 
 volumes:
