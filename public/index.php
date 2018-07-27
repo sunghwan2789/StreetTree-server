@@ -1,8 +1,9 @@
 <?php
 require __DIR__ . '/../vendor/autoload.php';
 
-$app = new Slim\App();
+$app = new App\Http\Kernel();
 
-$app->get('/', App\Http\Actions\HomeAction::class);
+$app->any('/', App\Http\Actions\HomeAction::class);
+$app->get('/dump', App\Http\Actions\DumpAction::class);
 
 $app->run();

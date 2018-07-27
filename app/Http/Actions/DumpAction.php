@@ -6,7 +6,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use App\Http\Responders\HomeResponder;
 use App\Models\HttpRequest;
 
-class HomeAction
+class DumpAction
 {
     /**
      * @var HomeResponder
@@ -20,15 +20,11 @@ class HomeAction
 
     public function __invoke(Request $request, Response $response): Response
     {
+        $data = json_decode(file_get_contents(__DIR__ . '/../../../storage/log'));
         $model = new HttpRequest;
-        $model->method = $request->getMethod()
-            . ' ' . json_encode($request->getQueryParams())
-            . ' HTTP/' . $request->getProtocolVersion();
-        foreach ($request->getHeaders() as $name => $value) {
-            $model->headers[] = $name . ': ' . implode(',', $value);
-        }
-        $model->body = $request->getParsedBody();
-        file_put_contents(__DIR__ . '/../../../storage/log', json_encode($model, JSON_PRETTY_PRINT));
+        $model->method = $data->method;
+        $model->headers = $data->headers;
+        $model->body = $data->body;
 
         return $this->responder->echo($response, $model);
     }
