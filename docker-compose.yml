@@ -6,7 +6,7 @@ services:
     depends_on:
       - php
     volumes:
-      - .:/home
+      - .:/srv
       - ./docker/nginx/host.conf:/etc/nginx/conf.d/default.conf
     ports:
       - "80:80"
@@ -23,9 +23,9 @@ services:
     depends_on:
       - db
     volumes:
-      - .:/home
+      - .:/srv
     user: '1000'
-    working_dir: /home
+    working_dir: /srv
     command: ./docker/php/start
 
 volumes:
