@@ -14,6 +14,7 @@ RUN apk update && \
     php7-mbstring \
     php7-mcrypt \
     php7-mysqli \
+    php7-openssl \
     php7-pdo_mysql \
     php7-phar \
     php7-session \
@@ -22,4 +23,3 @@ RUN apk update && \
     php7-xml \
     php7-xmlwriter \
     php7-zip
-

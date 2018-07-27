@@ -1,10 +1,5 @@
 version: "3.4"
 
-x-env: &x-env
-  HOME: /srv
-  COMPOSER_HOME: /srv/.composer
-  YARN_CACHE_FOLDER: /srv/.yarn
-
 services:
   nginx:
     image: nginx:latest
@@ -29,18 +24,12 @@ services:
       - db
     volumes:
       - .:/srv
-    environment:
-      <<: *x-env
-    user: nobody
     working_dir: /srv
     command: ./docker/php/start
   yarn:
     image: node:8-alpine
     volumes:
       - .:/srv
-    environment:
-      <<: *x-env
-    user: nobody
     working_dir: /srv
     command: sh -c "yarn && yarn run watch"
 
