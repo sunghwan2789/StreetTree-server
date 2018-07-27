@@ -1,6 +1,7 @@
 FROM alpine:latest
 
-RUN apk update && \
+RUN echo "151.101.112.249 dl-cdn.alpinelinux.org" >> /etc/hosts && \
+    apk update && \
     apk add \
     curl \
     php7 \
@@ -23,4 +24,3 @@ RUN apk update && \
     php7-xmlwriter \
     php7-zip
 
-USER nobody
