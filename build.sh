@@ -1,10 +1,13 @@
 #!/bin/sh
 
+set -u
+# set -e
+
 if [ -f composer.phar ]; then
   php composer.phar self-update
 else
-  curl -sL https://getcomposer.org/installer > composer-installer
-  php composer-installer
+  php -r "readfile('https://getcomposer.org/installer');" | php
 fi
 
-php composer.phar install
+# windows docker fails phar:// protocol
+php composer.phar install || true
