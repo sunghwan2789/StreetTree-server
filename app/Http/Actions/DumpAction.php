@@ -25,6 +25,7 @@ class DumpAction
         $model->method = $data->method;
         $model->headers = $data->headers;
         $model->body = $data->body;
+        $model->files = $data->files;
 
         return $this->responder->echo($response, $model);
     }

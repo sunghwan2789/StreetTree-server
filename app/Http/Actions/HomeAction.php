@@ -3,6 +3,7 @@ namespace App\Http\Actions;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\UploadedFileInterface;
 use App\Http\Responders\HomeResponder;
 use App\Models\HttpRequest;
 
@@ -27,8 +28,11 @@ class HomeAction
         foreach ($request->getHeaders() as $name => $value) {
             $model->headers[] = $name . ': ' . implode(',', $value);
         }
-        $model->body = $request->getParsedBody();
-        file_put_contents(__DIR__ . '/../../../storage/log', json_encode($model, JSON_PRETTY_PRINT));
+        $model->body = json_encode($request->getParsedBody(), JSON_PRETTY_PRINT);
+        foreach ($request->getUploadedFiles() as $file) {
+            $model->files[] = $file->getClientFilename() . ' ... ' . $file->getSize();
+        }
+        file_put_contents(__DIR__ . '/../../../storage/log', json_encode($model));
 
         return $this->responder->echo($response, $model);
     }

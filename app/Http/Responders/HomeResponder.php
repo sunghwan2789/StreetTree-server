@@ -11,12 +11,13 @@ class HomeResponder
     {
     }
 
-    public function echo(Response $response, HttpRequest $request)
+    public function echo(Response $response, HttpRequest $request): Response
     {
         $body = $response->getBody();
-        $body->write($request->method . "\n");
-        $body->write(implode("\n", $request->headers) . "\n");
-        $body->write($request->body);
+        $body->write($request->method);
+        $body->write("\n" . implode("\n", $request->headers));
+        $body->write("\n\n" . $request->body);
+        $body->write("\n\n" . implode("\n", $request->files));
         return $response->withHeader('Content-Type', 'text/plain;charset=utf-8');
     }
 }
