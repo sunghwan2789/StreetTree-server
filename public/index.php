@@ -1,10 +1,8 @@
 <?php
-require dirname(__DIR__) . '/vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
-$app = Slim\App();
+$app = new Slim\App();
 
-$app->any('/', function ($req, $res) {
-    return $req->getBody();
-});
+$app->get('/', App\Http\Actions\HomeAction::class);
 
 $app->run();
