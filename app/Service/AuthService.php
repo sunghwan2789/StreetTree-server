@@ -21,7 +21,7 @@ class AuthService
     {
         return $this->em->getRepository(User::class)
             ->findOneBy([
-                'id' => $username
+                'username' => $username
             ]);
     }
 }

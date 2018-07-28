@@ -4,8 +4,8 @@ namespace App\Http\Action;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Doctrine\ORM\EntityManager;
-use App\Entity\Field;
-use App\Entity\Survey;
+use App\Entity\MeasureMetadata;
+use App\Entity\Measure;
 use App\Entity\User;
 
 class SurveyCreateAction
@@ -26,39 +26,39 @@ class SurveyCreateAction
 
         $this->em->beginTransaction();
 
-        $user = $this->em->getRepository(User::class)->find(1);
+        [ $user ] = $this->em->getRepository(User::class)->findAll();
         if ($user === null) {
             $user = new User();
-            $user->id = 'bbbb';
-            $user->pw = '??';
-            $user->name = 'gogo';
+            $user->username = 'bbbb';
+            $user->password = '??';
+            $user->fullName = '길동이';
             $this->em->persist($user);
             $this->em->flush();
         }
 
-        $field = new Field();
-        $field->fieldName = $body->field_name;
-        $field->clientName = $body->client;
-        // $field->regionCode = $body->region_code;
-        $field->surveryAt = $body->date;
-        $field->employee = $user;
-        $field->employeeName = $user->name;
-        $this->em->persist($field);
+        $metadata = new MeasureMetadata();
+        // $metadata->siteRegionCode = $body->region_code;
+        $metadata->siteName = $body->field_name;
+        $metadata->clientName = $body->client;
+        $metadata->createdAt = new \DateTime($body->date);
+        $metadata->author = $user;
+        $metadata->authorFullName = $user->fullName;
+        $this->em->persist($metadata);
         $this->em->flush();
 
         foreach ($body->list as $data) {
-            $survey = new Survey();
-            $survey->field = $field;
-            $survey->surveyNumber = $data->number;
-            $survey->plateName = $data->plate;
-            $survey->treeNumber = $data->tree_number;
-            $survey->isInstalled = $data->is_installed;
-            $survey->points = json_encode($data->points);
-            // $survey->picture
-            $survey->latitude = $data->latitude;
-            $survey->longitude = $data->longitude;
+            $measure = new Measure();
+            $measure->sequenceNumber = $data->number;
+            $measure->latitude = $data->latitude;
+            $measure->longitude = $data->longitude;
+            $measure->plateName = $data->plate;
+            $measure->treeNumber = $data->tree_number;
+            $measure->isInstalled = $data->is_installed;
+            $measure->points = $data->points;
+            // $measure->picture
+            $measure->metadata = $metadata;
 
-            $this->em->persist($survey);
+            $this->em->persist($measure);
         }
         $this->em->flush();
 

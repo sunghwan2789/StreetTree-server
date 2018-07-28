@@ -1,14 +1,12 @@
 <?php
-
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * User
+ * 사용자 계정
  *
  * @ORM\Entity
- * @ORM\Table(name="users", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"})})
  */
 class User
 {
@@ -16,31 +14,31 @@ class User
      * @var int
      *
      * @ORM\Id
-     * @ORM\Column(name="user_seq", type="integer")
+     * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    public $userSeq;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="id", type="string", length=50)
      */
     public $id;
 
     /**
-     * @var string
+     * @var string 아이디
      *
-     * @ORM\Column(name="pw", type="string", length=90)
+     * @ORM\Column(type="string", length=50, unique=true)
      */
-    public $pw;
+    public $username;
 
     /**
-     * @var string
+     * @var string 비밀번호
      *
-     * @ORM\Column(name="name", type="text")
+     * @ORM\Column(type="string", length=90)
      */
-    public $name;
+    public $password;
+
+    /**
+     * @var string 성명
+     *
+     * @ORM\Column(type="text")
+     */
+    public $fullName;
 
 
 }
