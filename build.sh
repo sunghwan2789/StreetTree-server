@@ -11,3 +11,5 @@ fi
 
 # windows docker fails phar:// protocol
 php composer.phar install || true
+
+./vendor/bin/doctrine-migrations migrations:migrate

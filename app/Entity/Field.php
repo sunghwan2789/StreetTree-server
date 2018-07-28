@@ -24,14 +24,14 @@ class Field
     /**
      * @var string
      *
-     * @ORM\Column(name="field_name", type="text", length=65535, nullable=false, options={"comment"="???"})
+     * @ORM\Column(name="field_name", type="text", length=65535, nullable=false, options={"comment"="현장명"})
      */
     public $fieldName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="region_code", type="string", length=50, nullable=false, options={"comment"="????"})
+     * @ORM\Column(name="region_code", type="string", length=50, nullable=false, options={"comment"="지역코드"})
      */
     public $regionCode;
 

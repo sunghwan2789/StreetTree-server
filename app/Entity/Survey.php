@@ -31,7 +31,7 @@ class Survey
     /**
      * @var string
      *
-     * @ORM\Column(name="plate_name", type="text", length=65535, nullable=false, options={"comment"="????"})
+     * @ORM\Column(name="plate_name", type="text", length=65535, nullable=false, options={"comment"="보호판?"})
      */
     public $plateName;
 

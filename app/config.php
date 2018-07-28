@@ -20,6 +20,11 @@ return [
             'dbname' => getenv('DB_DATABASE'),
             'user' => getenv('DB_USERNAME'),
             'password' => getenv('DB_PASSWORD'),
+            'charset' => 'utf8mb4',
+            'defaultTableOptions' => [
+                'charset' => 'utf8mb4',
+                'collate' => 'utf8mb4_unicode_ci',
+            ],
         ],
     ],
 

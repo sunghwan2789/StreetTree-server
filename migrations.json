@@ -1,0 +1,4 @@
+{
+    "migrations_namespace": "DoctrineMigrations",
+    "migrations_directory": "./database/migrations"
+}
