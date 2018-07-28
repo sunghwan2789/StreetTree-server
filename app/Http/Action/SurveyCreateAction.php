@@ -6,6 +6,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Doctrine\ORM\EntityManager;
 use App\Entity\Field;
 use App\Entity\Survey;
+use App\Entity\User;
 
 class SurveyCreateAction
 {
@@ -25,20 +26,29 @@ class SurveyCreateAction
 
         $this->em->beginTransaction();
 
+        $user = $this->em->getRepository(User::class)->find(1);
+        if ($user === null) {
+            $user = new User();
+            $user->id = 'bbbb';
+            $user->pw = '??';
+            $user->name = 'gogo';
+            $this->em->persist($user);
+            $this->em->flush();
+        }
+
         $field = new Field();
         $field->fieldName = $body->field_name;
         $field->clientName = $body->client;
         // $field->regionCode = $body->region_code;
         $field->surveryAt = $body->date;
-        // $field->userSeq =
-        // $field->userName =
-
+        $field->employee = $user;
+        $field->employeeName = $user->name;
         $this->em->persist($field);
         $this->em->flush();
 
         foreach ($body->list as $data) {
             $survey = new Survey();
-            $survey->fieldSeq = $field;
+            $survey->field = $field;
             $survey->surveyNumber = $data->number;
             $survey->plateName = $data->plate;
             $survey->treeNumber = $data->tree_number;
