@@ -8,8 +8,5 @@ $app = new App\Http\Kernel();
 
 $app->any('/', App\Http\Action\HomeAction::class);
 $app->get('/dump', App\Http\Action\DumpAction::class);
-$app->get('/db', function () {
-    return $this->get('PDO')->quote('pojadf$!@#"<>BF\'AF#%)!(!@(#~Þr');
-});
 
 $app->run();

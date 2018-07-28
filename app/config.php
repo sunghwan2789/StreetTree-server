@@ -1,18 +1,43 @@
 <?php
 
-use function DI\create;
-use function DI\get;
-use function DI\string;
+use Psr\Container\ContainerInterface;
 
 return [
     'settings.storagePath' => __DIR__ . '/../storage',
-    'settings.dsn' => 'mysql:host=' . getenv('DB_HOST') . ';dbname=' . getenv('DB_DATABASE') . ';charset=utf8mb4',
 
-    App\Service\DumpService::class => create()
-        ->constructor(string('{settings.storagePath}/dump')),
+    'settings.doctrine' => [
+        'meta' => [
+            'entity_path' => [
+                __DIR__ . '/Entity',
+            ],
+            'auto_generate_proxies' => true,
+            'proxy_dir'   =>  __DIR__ . '/../storage/doctrine/proxies',
+            'cache'       => null,
+        ],
+        'connection' => [
+            'driver' => 'pdo_mysql',
+            'host' => getenv('DB_HOST'),
+            'dbname' => getenv('DB_DATABASE'),
+            'user' => getenv('DB_USERNAME'),
+            'password' => getenv('DB_PASSWORD'),
+        ],
+    ],
 
-    PDO::class => create()
-        ->constructor(get('settings.dsn'), getenv('DB_USERNAME'), getenv('DB_PASSWORD'), [])
-        ->method('setAttribute', PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION)
-        ->method('setAttribute', PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC),
+    App\Service\DumpService::class => function (ContainerInterface $c) {
+        return new App\Service\DumpService($c->get('settings.storagePath') . '/dump');
+    },
+
+    Doctrine\ORM\EntityManager::class => function (ContainerInterface $c) {
+        $settings = $c->get('settings.doctrine');
+
+        $config = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(
+            $settings['meta']['entity_path'],
+            $settings['meta']['auto_generate_proxies'],
+            $settings['meta']['proxy_dir'],
+            $settings['meta']['cache'],
+            false
+        );
+
+        return Doctrine\ORM\EntityManager::create($settings['connection'], $config);
+    },
 ];
