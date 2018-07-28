@@ -5,15 +5,16 @@ use Psr\Container\ContainerInterface;
 
 class DumpService
 {
-    private $storagePath;
+    private $path;
+
     private function getDumpPath()
     {
-        return $this->storagePath . '/dump';
+        return $this->path;
     }
 
-    public function __construct(ContainerInterface $container)
+    public function __construct($path)
     {
-        $this->storagePath = $container->get('settings.storage')['path'];
+        $this->path = $path;
     }
 
     public function save($obj)
