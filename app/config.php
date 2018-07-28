@@ -28,6 +28,12 @@ return [
         ],
     ],
 
+    'settings.jwtauth' => [
+        'path' => ['/'],
+        'ignore' => ['/login'],
+        'secret' => getenv('JWTAUTH_SECRET'),
+    ],
+
     App\Service\DumpService::class => function (ContainerInterface $c) {
         return new App\Service\DumpService($c->get('settings.storagePath') . '/dump');
     },
@@ -44,5 +50,9 @@ return [
         );
 
         return Doctrine\ORM\EntityManager::create($settings['connection'], $config);
+    },
+
+    Tuupola\Middleware\JwtAuthentication::class => function (ContainerInterface $c) {
+        return new Tuupola\Middleware\JwtAuthentication($c->get('settings.jwtauth'));
     },
 ];

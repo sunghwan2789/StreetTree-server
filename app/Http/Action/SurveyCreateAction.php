@@ -64,6 +64,6 @@ class SurveyCreateAction
 
         $this->em->commit();
 
-        return $response;
+        return $response->withStatus(201);
     }
 }

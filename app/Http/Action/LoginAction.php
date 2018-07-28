@@ -3,13 +3,13 @@ namespace App\Http\Action;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
-use App\Http\Responder\ApiResponder;
 use App\Service\AuthService;
+use App\Http\Responder\LoginResponder;
 
 class LoginAction
 {
     /**
-     * @var ApiResponder
+     * @var LoginResponder
      */
     private $responder;
 
@@ -18,10 +18,8 @@ class LoginAction
      */
     private $auth;
 
-    public function __construct(
-        ApiResponder $responder,
-        AuthService $auth
-    ) {
+    public function __construct(LoginResponder $responder, AuthService $auth)
+    {
         $this->responder = $responder;
         $this->auth = $auth;
     }
@@ -29,6 +27,9 @@ class LoginAction
     public function __invoke(Request $request, Response $response): Response
     {
         $body = $request->getParsedBody();
-        return $this->responder->json($response, $this->auth->attemptLogin($body['id'], $body['pw']));
+        if ($this->auth->attemptLogin($body['id'], $body['pw'])) {
+            $token = $this->auth->issueToken($body['id']);
+        }
+        return $this->responder->respond($response, $token);
     }
 }
