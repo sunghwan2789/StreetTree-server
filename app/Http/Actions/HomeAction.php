@@ -6,6 +6,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\UploadedFileInterface;
 use App\Http\Responders\HomeResponder;
 use App\Models\HttpRequest;
+use App\Services\DumpService;
 
 class HomeAction
 {
@@ -14,9 +15,17 @@ class HomeAction
      */
     private $responder;
 
-    public function __construct(HomeResponder $responder)
-    {
+    /**
+     * @var DumpService
+     */
+    private $dump;
+
+    public function __construct(
+        HomeResponder $responder,
+        DumpService $dump
+    ) {
         $this->responder = $responder;
+        $this->dump = $dump;
     }
 
     public function __invoke(Request $request, Response $response): Response
@@ -32,7 +41,7 @@ class HomeAction
         foreach ($request->getUploadedFiles() as $file) {
             $model->files[] = $file->getClientFilename() . ' ... ' . $file->getSize();
         }
-        file_put_contents(__DIR__ . '/../../../storage/log', json_encode($model));
+        $this->dump->save($model);
 
         return $this->responder->echo($response, $model);
     }

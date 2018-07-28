@@ -5,6 +5,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use App\Http\Responders\HomeResponder;
 use App\Models\HttpRequest;
+use App\Services\DumpService;
 
 class DumpAction
 {
@@ -13,14 +14,22 @@ class DumpAction
      */
     private $responder;
 
-    public function __construct(HomeResponder $responder)
-    {
+    /**
+     * @var DumpService
+     */
+    private $dump;
+
+    public function __construct(
+        HomeResponder $responder,
+        DumpService $dump
+    ) {
         $this->responder = $responder;
+        $this->dump = $dump;
     }
 
     public function __invoke(Request $request, Response $response): Response
     {
-        $data = json_decode(file_get_contents(__DIR__ . '/../../../storage/log'));
+        $data = $this->dump->load();
         $model = new HttpRequest;
         $model->method = $data->method;
         $model->headers = $data->headers;

@@ -11,7 +11,7 @@ class Kernel extends App
      */
     protected function configureContainer(ContainerBuilder $builder)
     {
-        // $builder->addDefinitions(__DIR__ . '/../../config.php');
+        $builder->addDefinitions(__DIR__ . '/../config.php');
 
         // foreach ($this->getContainerDefinitions() as $definition) {
         //     $builder->addDefinitions($definition());
