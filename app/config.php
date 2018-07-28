@@ -7,6 +7,6 @@ use function DI\string;
 return [
     'settings.storagePath' => __DIR__ . '/../storage',
 
-    App\Services\DumpService::class => create()
+    App\Service\DumpService::class => create()
         ->constructor(string('{settings.storagePath}/dump')),
 ];

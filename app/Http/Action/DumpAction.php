@@ -1,11 +1,11 @@
 <?php
-namespace App\Http\Actions;
+namespace App\Http\Action;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
-use App\Http\Responders\HomeResponder;
-use App\Models\HttpRequest;
-use App\Services\DumpService;
+use App\Http\Responder\HomeResponder;
+use App\Model\HttpRequest;
+use App\Service\DumpService;
 
 class DumpAction
 {

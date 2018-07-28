@@ -1,9 +1,9 @@
 <?php
-namespace App\Http\Responders;
+namespace App\Http\Responder;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
-use App\Models\HttpRequest;
+use App\Model\HttpRequest;
 
 class HomeResponder
 {

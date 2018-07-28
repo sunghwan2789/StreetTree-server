@@ -6,7 +6,7 @@ $dotenv->load();
 
 $app = new App\Http\Kernel();
 
-$app->any('/', App\Http\Actions\HomeAction::class);
-$app->get('/dump', App\Http\Actions\DumpAction::class);
+$app->any('/', App\Http\Action\HomeAction::class);
+$app->get('/dump', App\Http\Action\DumpAction::class);
 
 $app->run();
