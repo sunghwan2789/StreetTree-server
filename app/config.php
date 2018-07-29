@@ -31,6 +31,9 @@ return [
     'settings.jwtauth' => [
         'path' => ['/'],
         'ignore' => ['/login'],
+        'secure' => false,
+        'cookie' => getenv('JWTAUTH_NAME'),
+        'attribute' => getenv('JWTAUTH_NAME'),
         'secret' => getenv('JWTAUTH_SECRET'),
     ],
 

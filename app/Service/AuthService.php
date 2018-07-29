@@ -20,25 +20,35 @@ class AuthService
         $this->repository = $repository;
     }
 
-    public function attemptLogin($username, $password): bool
+    /**
+     * 로그인을 시도하고 오류 시 Exception을 발생한다.
+     *
+     * TODO: 상황에 맞는 Exception 정의하기
+     * ex) IncorrectPasswordException, DisabledUserException
+     *
+     * @throws \InvalidArgumentException 비밀번호 불일치
+     */
+    public function attemptLogin(User $user, string $password)
     {
-        $user = $this->repository->findOneByUsername($username);
-        if ($user === null) {
-            return false;
+        return; // TODO: 회원 등록 기능 구현 후 삭제
+
+        if (!hash_equals($user->password, crypt($password, $user->password))) {
+            throw new \InvalidArgumentException('password incorrect');
         }
-        return true;
-        return hash_equals($user->password, crypt($password, $user->password));
     }
 
-    public function issueToken($username): string
+    /**
+     * Stateless하게 회원을 확인할 수 있는 토큰을 발행한다.
+     */
+    public function issueToken(User $user): string
     {
-        $user = $this->repository->findOneByUsername($username);
         $issuedAt = new DateTime();
         $expiresAt = new DateTime('+1 day');
         return JWT::encode([
             'iat' => $issuedAt->getTimestamp(),
             'exp' => $expiresAt->getTimestamp(),
             'i' => $user->id,
+            'n' => $user->fullName,
         ], getenv('JWTAUTH_SECRET'));
     }
 

@@ -1,17 +1,30 @@
 <?php
 namespace App\Http\Responder;
 
-use Psr\Http\Message\ResponseInterface;
+use Slim\Http\Response;
 
 class LoginResponder
 {
-    public function respond(ResponseInterface $response, $token): ResponseInterface
+    public function grant(Response $response, string $token): Response
     {
-        if ($token) {
-            setcookie('token', $token, time() + 72800, '/', '', false, true);
-            return $response;
-        } else {
-            return $response->withStatus(403);
-        }
+        setcookie(getenv('JWTAUTH_NAME'), $token, time() + 72800, '/', '', false /* sync with settings.jwtauth.secure */, true);
+        return $response->withStatus(200);
+    }
+
+    public function userNotFound(Response $response): Response
+    {
+        return $this->reject($response, '아이디가 없습니다.');
+    }
+
+    public function incorrectPassword(Response $response): Response
+    {
+        return $this->reject($response, '비밀번호가 틀렸습니다.');
+    }
+
+    public function reject(Response $response, string $message): Response
+    {
+        $body = $response->getBody();
+        $body->write($message);
+        return $response->withStatus(403);
     }
 }

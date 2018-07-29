@@ -4,7 +4,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * 사용자 계정
+ * 회원
  *
  * @ORM\Entity
  */

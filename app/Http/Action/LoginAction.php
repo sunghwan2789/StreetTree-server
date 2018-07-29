@@ -1,10 +1,11 @@
 <?php
 namespace App\Http\Action;
 
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Psr\Http\Message\ResponseInterface as Response;
+use Slim\Http\Request;
+use Slim\Http\Response;
 use App\Service\AuthService;
 use App\Http\Responder\LoginResponder;
+use App\Repository\UserRepository;
 
 class LoginAction
 {
@@ -14,22 +15,45 @@ class LoginAction
     private $responder;
 
     /**
+     * @var UserRepository
+     */
+    private $repository;
+
+    /**
      * @var AuthService
      */
     private $auth;
 
-    public function __construct(LoginResponder $responder, AuthService $auth)
-    {
+    public function __construct(
+        LoginResponder $responder,
+        UserRepository $repository,
+        AuthService $auth
+    ) {
         $this->responder = $responder;
+        $this->repository = $repository;
         $this->auth = $auth;
     }
 
     public function __invoke(Request $request, Response $response): Response
     {
-        $body = $request->getParsedBody();
-        if ($this->auth->attemptLogin($body['id'], $body['pw'])) {
-            $token = $this->auth->issueToken($body['id']);
+        $username = $request->getParsedBodyParam('id');
+        $password = $request->getParsedBodyParam('pw');
+
+        // FIXME: $username 자료형이 array이면 여러 아이디를 한번에 질의함
+        $user = $this->repository->findOneByUsername($username);
+        if ($user === null) {
+            return $this->responder->userNotFound($response);
         }
-        return $this->responder->respond($response, $token);
+
+        try {
+            $this->auth->attemptLogin($user, $password);
+        } catch (\InvalidArgumentException $e) {
+            return $this->responder->incorrectPassword($response);
+        } catch (\TypeError | \Exception $e) {
+            return $this->responder->reject($response, $e->getMessage());
+        }
+
+        $token = $this->auth->issueToken($user);
+        return $this->responder->grant($response, $token);
     }
 }
