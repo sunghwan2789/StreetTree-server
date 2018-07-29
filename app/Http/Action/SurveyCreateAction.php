@@ -35,7 +35,9 @@ class SurveyCreateAction
 
         $this->em->beginTransaction();
 
-        $user = $this->user->find($request->getAttribute(getenv('JWTAUTH_NAME'))['i']);
+        $userId = $request->getAttribute(getenv('JWTAUTH_NAME'))['i'];
+        // FIXME: 로그인 기능이 정상 작동하면 $userId는 null일 수 없다!!!!
+        $user = $this->user->find($userId ?? 0);
 
         $metadata = new MeasureMetadata();
         // $metadata->siteRegionCode = $body->region_code;
@@ -43,7 +45,8 @@ class SurveyCreateAction
         $metadata->clientName = $body->client;
         $metadata->createdAt = new \DateTime($body->date);
         $metadata->author = $user;
-        $metadata->authorFullName = $user->fullName;
+        // FIXME: 로그인 기능이 정상 작동하면  $user도 null일 수 없다!!!!
+        $metadata->authorFullName = $user->fullName ?? '익명';
         $this->em->persist($metadata);
         $this->em->flush();
 

@@ -11,6 +11,6 @@ $app->get('/dump', App\Http\Action\DumpAction::class);
 $app->post('/login', App\Http\Action\LoginAction::class);
 $app->post('/survey/new', App\Http\Action\SurveyCreateAction::class);
 
-$app->add(Tuupola\Middleware\JwtAuthentication::class);
+// $app->add(Tuupola\Middleware\JwtAuthentication::class);
 
 $app->run();
