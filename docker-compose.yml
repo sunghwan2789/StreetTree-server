@@ -1,12 +1,21 @@
 version: "3.4"
 
+x-uid: &x-uid ${SUDO_UID-$UID}
+x-pwd: &x-pwd /srv
+x-mnt: &x-mnt .:/srv
+x-env: &x-env
+  DB_HOST: db
+  HOME: /srv
+  COMPOSER_HOME: /srv/.composer
+  YARN_CACHE_FOLDER: /srv/.yarn
+
 services:
   nginx:
     image: nginx:latest
     depends_on:
       - php
     volumes:
-      - .:/srv
+      - *x-mnt
       - ./docker/nginx/host.conf:/etc/nginx/conf.d/default.conf
     ports:
       - "80:80"
@@ -23,14 +32,20 @@ services:
     depends_on:
       - db
     volumes:
-      - .:/srv
-    working_dir: /srv
+      - *x-mnt
+    environment:
+      <<: *x-env
+    user: *x-uid
+    working_dir: *x-pwd
     command: ./docker/php/start
   yarn:
     image: node:8-alpine
     volumes:
-      - .:/srv
-    working_dir: /srv
+      - *x-mnt
+    environment:
+      <<: *x-env
+    user: *x-uid
+    working_dir: *x-pwd
     command: sh -c "yarn && yarn run watch"
 
 volumes:
