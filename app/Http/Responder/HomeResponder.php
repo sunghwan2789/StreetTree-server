@@ -17,7 +17,7 @@ class HomeResponder
         $body->write($request->method);
         $body->write("\n" . implode("\n", $request->headers));
         $body->write("\n\n" . $request->body);
-        $body->write("\n\n" . implode("\n", $request->files));
+        $body->write("\n\n" . $request->files);
         return $response->withHeader('Content-Type', 'text/plain;charset=utf-8');
     }
 }

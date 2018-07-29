@@ -38,9 +38,7 @@ class HomeAction
             $model->headers[] = $name . ': ' . implode(',', $value);
         }
         $model->body = json_encode($request->getParsedBody(), JSON_PRETTY_PRINT);
-        foreach ($request->getUploadedFiles() as $file) {
-            $model->files[] = $file->getClientFilename() . ' ... ' . $file->getSize();
-        }
+        $model->files = json_encode($request->getUploadedFiles(), JSON_PRETTY_PRINT);
         $this->dump->save($model);
 
         return $this->responder->echo($response, $model);
