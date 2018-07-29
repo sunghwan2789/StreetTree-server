@@ -1,12 +1,13 @@
 <?php
 namespace App\Http\Action;
 
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Psr\Http\Message\ResponseInterface as Response;
+use Slim\Http\Request;
+use Slim\Http\Response;
 use Doctrine\ORM\EntityManager;
 use App\Entity\MeasureMetadata;
 use App\Entity\Measure;
 use App\Entity\User;
+use App\Repository\UserRepository;
 
 class SurveyCreateAction
 {
@@ -15,9 +16,17 @@ class SurveyCreateAction
      */
     private $em;
 
-    public function __construct(EntityManager $em)
-    {
+    /**
+     * @var UserRepository
+     */
+    private $user;
+
+    public function __construct(
+        EntityManager $em,
+        UserRepository $user
+    ) {
         $this->em = $em;
+        $this->user = $user;
     }
 
     public function __invoke(Request $request, Response $response)
@@ -26,15 +35,7 @@ class SurveyCreateAction
 
         $this->em->beginTransaction();
 
-        [ $user ] = $this->em->getRepository(User::class)->findAll();
-        if ($user === null) {
-            $user = new User();
-            $user->username = 'bbbb';
-            $user->password = '??';
-            $user->fullName = '길동이';
-            $this->em->persist($user);
-            $this->em->flush();
-        }
+        $user = $this->user->find($request->getAttribute(getenv('JWTAUTH_NAME'))['i']);
 
         $metadata = new MeasureMetadata();
         // $metadata->siteRegionCode = $body->region_code;

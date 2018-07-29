@@ -34,7 +34,7 @@ class LoginAction
         $this->auth = $auth;
     }
 
-    public function __invoke(Request $request, Response $response): Response
+    public function __invoke(Request $request, Response $response)
     {
         $username = $request->getParsedBodyParam('id');
         $password = $request->getParsedBodyParam('pw');
@@ -53,6 +53,7 @@ class LoginAction
             return $this->responder->reject($response, $e->getMessage());
         }
 
+        // TODO: Refresh Token 발급하고 짧은 단위로 갱신하기
         $token = $this->auth->issueToken($user);
         return $this->responder->grant($response, $token);
     }

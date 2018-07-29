@@ -28,7 +28,7 @@ class HomeAction
         $this->dump = $dump;
     }
 
-    public function __invoke(Request $request, Response $response): Response
+    public function __invoke(Request $request, Response $response)
     {
         $model = new HttpRequest;
         $model->method = $request->getMethod()

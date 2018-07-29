@@ -23,4 +23,9 @@ final class UserRepository
             'username' => $username
         ]);
     }
+
+    public function find($id): ?User
+    {
+        return $this->repository->find($id);
+    }
 }
