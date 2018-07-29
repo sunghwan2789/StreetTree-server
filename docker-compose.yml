@@ -1,8 +1,7 @@
 version: "3.4"
 
-x-uid: &x-uid ${SUDO_UID-$UID}
-x-pwd: &x-pwd /srv
 x-mnt: &x-mnt .:/srv
+x-pwd: &x-pwd /srv
 x-env: &x-env
   DB_HOST: db
   HOME: /srv
@@ -35,7 +34,7 @@ services:
       - *x-mnt
     environment:
       <<: *x-env
-    user: *x-uid
+    user: $UID
     working_dir: *x-pwd
     command: ./docker/php/start
   yarn:
@@ -44,7 +43,7 @@ services:
       - *x-mnt
     environment:
       <<: *x-env
-    user: *x-uid
+    user: $UID
     working_dir: *x-pwd
     command: sh -c "yarn && yarn run watch"
 
