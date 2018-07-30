@@ -50,7 +50,7 @@ class LoginAction
         } catch (\InvalidArgumentException $e) {
             return $this->responder->incorrectPassword($response);
         } catch (\TypeError | \Exception $e) {
-            return $this->responder->reject($response, $e->getMessage());
+            return $this->responder->unknownError($response, $e->getMessage());
         }
 
         // TODO: Refresh Token 발급하고 짧은 단위로 갱신하기

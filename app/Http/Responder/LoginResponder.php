@@ -13,18 +13,25 @@ class LoginResponder
 
     public function userNotFound(Response $response): Response
     {
-        return $this->reject($response, '아이디가 없습니다.');
+        return $this->reject($response, 'USER_NOT_FOUND', '아이디가 없습니다.');
     }
 
     public function incorrectPassword(Response $response): Response
     {
-        return $this->reject($response, '비밀번호가 틀렸습니다.');
+        return $this->reject($response, 'INCORRECT_PASSWORD', '비밀번호가 틀렸습니다.');
     }
 
-    public function reject(Response $response, string $message): Response
+    public function unknownError(Response $response, $message): Response
     {
-        $body = $response->getBody();
-        $body->write($message);
-        return $response->withStatus(403);
+        return $this->reject($response, 'UNKNOWN_ERROR', $message);
+    }
+
+    protected function reject(Response $response, $error, string $message): Response
+    {
+        return $response->withStatus(403)
+            ->withJson([
+                'error' => $error,
+                'message' => $message,
+            ]);
     }
 }
