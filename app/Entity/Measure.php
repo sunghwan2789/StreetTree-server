@@ -69,11 +69,11 @@ class Measure
     public $points;
 
     /**
-     * @var resource|null 수목 뿌리 사진
+     * @var \App\Entity\RootImage 수목 뿌리 사진
      *
-     * @ORM\Column(type="blob", nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\RootImage")
      */
-    public $picture;
+    public $rootImage;
 
     /**
      * @var \App\Entity\MeasureMetadata
