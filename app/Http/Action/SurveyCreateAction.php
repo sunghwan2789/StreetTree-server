@@ -57,7 +57,7 @@ class SurveyCreateAction
 
         foreach ($request->getParsedBodyParam('list') as $item) {
             $rootImage = null;
-            if ($item->rootImageId !== null) {
+            if (!empty($item['rootImageId'])) {
                 $rootImage = $this->rootImages->find($item['rootImageId']);
             }
 
