@@ -42,7 +42,7 @@ class SurveyCreateAction
         $this->em->beginTransaction();
 
         $userId = $request->getAttribute(getenv('JWTAUTH_NAME'))['i'];
-        $user = $this->users->find($userId ?? 0);
+        $user = $this->users->find($userId);
 
         $metadata = new MeasureMetadata();
         // TODO: 앱에서 전송 안 해서 미구현
