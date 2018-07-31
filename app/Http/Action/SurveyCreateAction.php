@@ -8,6 +8,7 @@ use App\Entity\MeasureMetadata;
 use App\Entity\Measure;
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Repository\RootImageRepository;
 
 class SurveyCreateAction
 {
@@ -19,47 +20,56 @@ class SurveyCreateAction
     /**
      * @var UserRepository
      */
-    private $user;
+    private $users;
+
+    /**
+     * @var RootImageRepository
+     */
+    private $rootImages;
 
     public function __construct(
         EntityManager $em,
-        UserRepository $user
+        UserRepository $users,
+        RootImageRepository $rootImages
     ) {
         $this->em = $em;
-        $this->user = $user;
+        $this->users = $users;
+        $this->rootImages = $rootImages;
     }
 
     public function __invoke(Request $request, Response $response)
     {
-        $body = json_decode($request->getParsedBody()['str']);
-
         $this->em->beginTransaction();
 
         $userId = $request->getAttribute(getenv('JWTAUTH_NAME'))['i'];
-        // FIXME: 로그인 기능이 정상 작동하면 $userId는 null일 수 없다!!!!
-        $user = $this->user->find($userId ?? 0);
+        $user = $this->users->find($userId ?? 0);
 
         $metadata = new MeasureMetadata();
-        // $metadata->siteRegionCode = $body->region_code;
-        $metadata->siteName = $body->field_name;
-        $metadata->clientName = $body->client;
-        $metadata->createdAt = new \DateTime($body->date);
+        // TODO: 앱에서 전송 안 해서 미구현
+        // $metadata->siteRegionCode = $request->getParsedBodyParam('siteRegionCode');
+        $metadata->siteName = $request->getParsedBodyParam('siteName');
+        $metadata->clientName = $request->getParsedBodyParam('clientName');
+        $metadata->createdAt = new \DateTime($request->getParsedBodyParam('createdAt'));
         $metadata->author = $user;
-        // FIXME: 로그인 기능이 정상 작동하면  $user도 null일 수 없다!!!!
-        $metadata->authorFullName = $user->fullName ?? '익명';
+        $metadata->authorFullName = $user->fullName;
         $this->em->persist($metadata);
         $this->em->flush();
 
-        foreach ($body->list as $data) {
+        foreach ($request->getParsedBodyParam('list') as $item) {
+            $rootImage = null;
+            if ($item->rootImageId !== null) {
+                $rootImage = $this->rootImages->find($item->rootImageId);
+            }
+
             $measure = new Measure();
-            $measure->sequenceNumber = $data->number;
-            $measure->latitude = $data->latitude;
-            $measure->longitude = $data->longitude;
-            $measure->plateName = $data->plate;
-            $measure->treeNumber = $data->tree_number;
-            $measure->isInstalled = $data->is_installed;
-            $measure->points = $data->points;
-            // $measure->picture
+            $measure->sequenceNumber = $item->sequenceNumber;
+            $measure->latitude = $item->latitude;
+            $measure->longitude = $item->longitude;
+            $measure->plateName = $item->plateName;
+            $measure->treeNumber = $item->treeNumber;
+            $measure->isInstalled = $item->isInstalled;
+            $measure->points = $item->points;
+            $measure->rootImage = $rootImage;
             $measure->metadata = $metadata;
 
             $this->em->persist($measure);
