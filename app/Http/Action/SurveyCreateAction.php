@@ -58,17 +58,17 @@ class SurveyCreateAction
         foreach ($request->getParsedBodyParam('list') as $item) {
             $rootImage = null;
             if ($item->rootImageId !== null) {
-                $rootImage = $this->rootImages->find($item->rootImageId);
+                $rootImage = $this->rootImages->find($item['rootImageId']);
             }
 
             $measure = new Measure();
-            $measure->sequenceNumber = $item->sequenceNumber;
-            $measure->latitude = $item->latitude;
-            $measure->longitude = $item->longitude;
-            $measure->plateName = $item->plateName;
-            $measure->treeNumber = $item->treeNumber;
-            $measure->isInstalled = $item->isInstalled;
-            $measure->points = $item->points;
+            $measure->sequenceNumber = $item['sequenceNumber'];
+            $measure->latitude = $item['latitude'];
+            $measure->longitude = $item['longitude'];
+            $measure->plateName = $item['plateName'];
+            $measure->treeNumber = $item['treeNumber'];
+            $measure->isInstalled = $item['isInstalled'];
+            $measure->points = $item['points'];
             $measure->rootImage = $rootImage;
             $measure->metadata = $metadata;
 
