@@ -10,7 +10,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Repository\RootImageRepository;
 
-class SurveyCreateAction
+class MeasureCreateAction
 {
     /**
      * @var EntityManager
