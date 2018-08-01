@@ -5,10 +5,10 @@ use Doctrine\ORM\EntityManager;
 use App\Http\Responder\RootImageResponder;
 use Slim\Http\Request;
 use Slim\Http\Response;
-use App\Entity\RootImage;
+use App\Entity\File;
 use App\Repository\UserRepository;
 
-final class RootImageUploadAction
+final class FileUploadAction
 {
     /**
      * @var EntityManager
@@ -39,16 +39,20 @@ final class RootImageUploadAction
     {
         $body = $request->getBody();
         $data = $body->getContents();
+        $mimeInfo = new \finfo(FILEINFO_MIME_TYPE);
+        $extInfo = new \finfo(FILEINFO_EXTENSION);
 
-        $authorId = $request->getAttribute(getenv('JWTAUTH_NAME'))['i'];
-        $author = $this->users->find($authorId);
+        $userId = $request->getAttribute(getenv('JWTAUTH_NAME'))['i'];
+        $user = $this->users->find($userId);
 
-        $rootImage = new RootImage();
-        $rootImage->author = $author;
+        $rootImage = new File();
         $rootImage->hash_crc32 = hash('crc32b', $data);
-        $rootImage->size = strlen($data);
-        $rootImage->data = $data;
         $rootImage->createdAt = new \DateTime();
+        $rootImage->size = strlen($data);
+        $rootImage->mimeType = $mimeInfo->buffer($data);
+        $rootImage->extension = $extInfo->buffer($data);
+        $rootImage->data = $data;
+        $rootImage->owner = $user;
         $this->em->persist($rootImage);
         $this->em->flush();
 
