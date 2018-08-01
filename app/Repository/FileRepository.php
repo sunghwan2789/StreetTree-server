@@ -1,11 +1,11 @@
 <?php
 namespace App\Repository;
 
-use App\Entity\RootImage;
+use App\Entity\File;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 
-final class RootImageRepository
+final class FileRepository
 {
     /**
      * @var EntityRepository
@@ -14,10 +14,10 @@ final class RootImageRepository
 
     public function __construct(EntityManager $entityManager)
     {
-        $this->repository = $entityManager->getRepository(RootImage::class);
+        $this->repository = $entityManager->getRepository(File::class);
     }
 
-    public function find($id): ?RootImage
+    public function find($id): ?File
     {
         return $this->repository->find($id);
     }
