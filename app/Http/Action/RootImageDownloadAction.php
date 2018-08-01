@@ -2,12 +2,12 @@
 namespace App\Http\Action;
 
 use Doctrine\ORM\EntityManager;
-use App\Http\Responder\RootImageResponder;
+use App\Http\Responder\FileResponder;
 use Slim\Http\Request;
 use Slim\Http\Response;
-use App\Entity\RootImage;
+use App\Entity\File;
 use App\Repository\UserRepository;
-use App\Repository\RootImageRepository;
+use App\Repository\FileRepository;
 
 final class RootImageDownloadAction
 {
@@ -17,28 +17,28 @@ final class RootImageDownloadAction
     private $em;
 
     /**
-     * @var RootImageResponder
+     * @var FileResponder
      */
     private $responder;
 
     /**
-     * @var RootImageRepository
+     * @var FileRepository
      */
-    private $rootImages;
+    private $files;
 
     public function __construct(
         EntityManager $em,
-        RootImageResponder $responder,
-        RootImageRepository $rootImages
+        FileResponder $responder,
+        FileRepository $files
     ) {
         $this->em = $em;
         $this->responder = $responder;
-        $this->rootImages = $rootImages;
+        $this->files = $files;
     }
 
     public function __invoke($id, Request $request, Response $response)
     {
-        $rootImage = $this->rootImages->find($id);
+        $rootImage = $this->files->find($id);
         return $this->responder->download($response, $rootImage);
     }
 }

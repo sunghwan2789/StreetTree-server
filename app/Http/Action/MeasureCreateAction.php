@@ -8,7 +8,7 @@ use App\Entity\MeasureMetadata;
 use App\Entity\Measure;
 use App\Entity\User;
 use App\Repository\UserRepository;
-use App\Repository\RootImageRepository;
+use App\Repository\FileRepository;
 
 class MeasureCreateAction
 {
@@ -23,18 +23,18 @@ class MeasureCreateAction
     private $users;
 
     /**
-     * @var RootImageRepository
+     * @var FileRepository
      */
-    private $rootImages;
+    private $files;
 
     public function __construct(
         EntityManager $em,
         UserRepository $users,
-        RootImageRepository $rootImages
+        FileRepository $files
     ) {
         $this->em = $em;
         $this->users = $users;
-        $this->rootImages = $rootImages;
+        $this->files = $files;
     }
 
     public function __invoke(Request $request, Response $response)
@@ -58,7 +58,7 @@ class MeasureCreateAction
         foreach ($request->getParsedBodyParam('list') as $item) {
             $rootImage = null;
             if (!empty($item['rootImageId'])) {
-                $rootImage = $this->rootImages->find($item['rootImageId']);
+                $rootImage = $this->files->find($item['rootImageId']);
             }
 
             $measure = new Measure();
