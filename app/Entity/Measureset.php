@@ -20,13 +20,6 @@ class Measureset
     public $id;
 
     /**
-     * @var string|null 현장 지역코드
-     *
-     * @ORM\Column(type="string", length=50, nullable=true)
-     */
-    public $siteRegionCode;
-
-    /**
      * @var string 현장명
      *
      * @ORM\Column(type="text")

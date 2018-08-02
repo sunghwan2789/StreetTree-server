@@ -41,6 +41,27 @@ class Measure
     public $longitude;
 
     /**
+     * @var string|null 지역코드(시도)
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    public $regionCode_sido;
+
+    /**
+     * @var string|null 지역코드(군)
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    public $regionCode_goon;
+
+    /**
+     * @var string|null 지역코드(구)
+     *
+     * @ORM\Column(type="string", nullable=ture)
+     */
+    public $regionCode_gu;
+
+    /**
      * @var string|null 보호판 이름?
      *
      * @ORM\Column(type="text", nullable=true)
