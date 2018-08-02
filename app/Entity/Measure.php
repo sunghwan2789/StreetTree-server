@@ -78,7 +78,7 @@ class Measure
     /**
      * @var \App\Entity\MeasureMetadata
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\MeasureMetadata")
+     * @ORM\ManyToOne(targetEntity="App\Entity\MeasureMetadata", inversedBy="measures")
      */
     public $metadata;
 

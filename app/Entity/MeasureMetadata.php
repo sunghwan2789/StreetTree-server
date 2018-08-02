@@ -61,5 +61,12 @@ class MeasureMetadata
      */
     public $authorFullName;
 
+    /**
+     * @var \App\Entity\Measure[]
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Measure", mappedBy="metadata")
+     */
+    public $measures;
+
 
 }
