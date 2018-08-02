@@ -78,6 +78,9 @@ class MeasureCreateAction
 
         $this->em->commit();
 
-        return $response->withStatus(201);
+        return $response->withStatus(201)
+            ->withJson([
+                'id' => $metadata->id,
+            ]);
     }
 }
