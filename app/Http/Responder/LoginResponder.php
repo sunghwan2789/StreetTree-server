@@ -10,11 +10,7 @@ class LoginResponder
     {
         setcookie(getenv('JWTAUTH_NAME'), $token, time() + 72800, '/', '', false /* sync with settings.jwtauth.secure */, true);
         return $response->withStatus(200)
-            ->withJson([
-                'id' => $user->id,
-                'username' => $user->username,
-                'full_name' => $user->fullName,
-            ]);
+            ->withJson($user);
     }
 
     public function userNotFound(Response $response): Response
