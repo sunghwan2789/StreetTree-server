@@ -43,6 +43,8 @@ final class FileUploadAction
         $this->responder = $responder;
         $this->users = $users;
         $this->fileStorage = __DIR__ . '/../../../storage/files';
+
+        ini_set('max_execution_time', 0);
     }
 
     public function getUploadedFile($request): UploadedFile
