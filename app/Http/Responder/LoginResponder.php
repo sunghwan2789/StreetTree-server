@@ -2,13 +2,19 @@
 namespace App\Http\Responder;
 
 use Slim\Http\Response;
+use App\Entity\User;
 
 class LoginResponder
 {
-    public function grant(Response $response, string $token): Response
+    public function grant(Response $response, string $token, User $user): Response
     {
         setcookie(getenv('JWTAUTH_NAME'), $token, time() + 72800, '/', '', false /* sync with settings.jwtauth.secure */, true);
-        return $response->withStatus(200);
+        return $response->withStatus(200)
+            ->withJson([
+                'id' => $user->id,
+                'username' => $user->username,
+                'full_name' => $user->fullName,
+            ]);
     }
 
     public function userNotFound(Response $response): Response

@@ -55,6 +55,6 @@ class LoginAction
 
         // TODO: Refresh Token 발급하고 짧은 단위로 갱신하기
         $token = $this->auth->issueToken($user);
-        return $this->responder->grant($response, $token);
+        return $this->responder->grant($response, $token, $user);
     }
 }
