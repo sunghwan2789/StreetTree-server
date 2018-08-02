@@ -30,9 +30,9 @@ class AuthService
      */
     public function attemptLogin(User $user, string $password)
     {
-        return; // TODO: 회원 등록 기능 구현 후 삭제
-
-        if (!hash_equals($user->password, crypt($password, $user->password))) {
+        // TODO: 비밀번호 암호화 저장 시 사용
+        // if (!hash_equals($user->password, crypt($password, $user->password))) {
+        if (!hash_equals($user->password, $password)) {
             throw new \InvalidArgumentException('password incorrect');
         }
     }
