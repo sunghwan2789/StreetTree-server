@@ -4,7 +4,7 @@ namespace App\Http\Action;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Doctrine\ORM\EntityManager;
-use App\Entity\MeasureMetadata;
+use App\Entity\Measureset;
 use App\Entity\Measure;
 use App\Entity\User;
 use App\Repository\UserRepository;
@@ -44,15 +44,15 @@ class MeasureCreateAction
         $userId = $request->getAttribute(getenv('JWTAUTH_NAME'))['i'];
         $user = $this->users->find($userId);
 
-        $metadata = new MeasureMetadata();
+        $measureset = new Measureset();
         // TODO: 앱에서 전송 안 해서 미구현
-        // $metadata->siteRegionCode = $request->getParsedBodyParam('siteRegionCode');
-        $metadata->siteName = $request->getParsedBodyParam('siteName');
-        $metadata->clientName = $request->getParsedBodyParam('clientName');
-        $metadata->createdAt = new \DateTime($request->getParsedBodyParam('createdAt'));
-        $metadata->author = $user;
-        $metadata->authorFullName = $user->fullName;
-        $this->em->persist($metadata);
+        // $measureset->siteRegionCode = $request->getParsedBodyParam('siteRegionCode');
+        $measureset->siteName = $request->getParsedBodyParam('siteName');
+        $measureset->clientName = $request->getParsedBodyParam('clientName');
+        $measureset->createdAt = new \DateTime($request->getParsedBodyParam('createdAt'));
+        $measureset->author = $user;
+        $measureset->authorFullName = $user->fullName;
+        $this->em->persist($measureset);
         $this->em->flush();
 
         foreach ($request->getParsedBodyParam('list') as $item) {
@@ -70,7 +70,7 @@ class MeasureCreateAction
             $measure->isInstalled = $item['isInstalled'];
             $measure->points = $item['points'];
             $measure->rootImage = $rootImage;
-            $measure->metadata = $metadata;
+            $measure->measureset = $measureset;
 
             $this->em->persist($measure);
         }
@@ -80,7 +80,7 @@ class MeasureCreateAction
 
         return $response->withStatus(201)
             ->withJson([
-                'id' => $metadata->id,
+                'id' => $measureset->id,
             ]);
     }
 }

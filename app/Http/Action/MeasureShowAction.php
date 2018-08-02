@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Action;
 
-use App\Repository\MeasureMetadataRepository;
+use App\Repository\MeasuresetRepository;
 use App\Http\Responder\MeasureResponder;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -14,13 +14,13 @@ final class MeasureShowAction
     private $responder;
 
     /**
-     * @var MeasureMetadataRepository
+     * @var MeasuresetRepository
      */
     private $measures;
 
     public function __construct(
         MeasureResponder $responder,
-        MeasureMetadataRepository $measures
+        MeasuresetRepository $measures
     ) {
         $this->responder = $responder;
         $this->measures = $measures;
