@@ -42,7 +42,7 @@ final class FileUploadAction
         $this->em = $em;
         $this->responder = $responder;
         $this->users = $users;
-        $this->fileStorage = $container->get('settings.fileStoragePath');
+        $this->fileStorage = __DIR__ . '/../../../storage/files';
     }
 
     public function getUploadedFile($request): UploadedFile
