@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  */
-class MeasureMetadata
+class Measureset
 {
     /**
      * @var int
@@ -64,7 +64,7 @@ class MeasureMetadata
     /**
      * @var \App\Entity\Measure[]
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Measure", mappedBy="metadata")
+     * @ORM\OneToMany(targetEntity="App\Entity\Measure", mappedBy="measureset")
      */
     public $measures;
 

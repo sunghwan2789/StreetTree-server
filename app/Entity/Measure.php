@@ -76,11 +76,11 @@ class Measure
     public $rootImage;
 
     /**
-     * @var \App\Entity\MeasureMetadata
+     * @var \App\Entity\Measureset
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\MeasureMetadata", inversedBy="measures")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Measureset", inversedBy="measures")
      */
-    public $metadata;
+    public $measureset;
 
 
 }
