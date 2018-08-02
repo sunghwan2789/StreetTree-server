@@ -15,7 +15,7 @@ final class FileResponder
             ]);
     }
 
-    public function view(Response $response, File $file)
+    public function show(Response $response, File $file)
     {
         return $this->send($response, $file, 'inline');
     }
@@ -27,15 +27,15 @@ final class FileResponder
 
     private function send(Response $response, File $file, string $dispositionType)
     {
-        $asciiFilename = $file->filename ?? $file->id . '.' . $file->extension;
-        $unicodeFilename = rawurlencode($asciiFilename);
+        $filename = $file->dispositionFilename;
+        $unicodeFilename = rawurlencode($file->dispositionFilename);
         // TODO: 206 상태 코드 지원하기
         return $response->withStatus(200)
-            ->withHeader('Content-Type', $file->mimeType)
+            ->withHeader('Content-Type', $file->dispositionMimeType)
             ->withHeader('Content-Disposition', $dispositionType
-                . "; filename=\"$asciiFilename\""
+                . "; filename=\"$filename\""
                 . "; filename*=UTF-8\'\'$unicodeFilename")
             ->withHeader('Content-Length', $file->size)
-            ->withBody(new Body($file->data));
+            ->withBody(new Body(fopen(__DIR__ . '/../../../storage/files/' . $file->filename, 'rb')));
     }
 }

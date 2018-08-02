@@ -8,6 +8,7 @@ use Slim\Http\Response;
 use App\Entity\File;
 use App\Repository\UserRepository;
 use App\Repository\FileRepository;
+use App\Repository\MeasureRepository;
 
 final class RootImageDownloadAction
 {
@@ -26,19 +27,26 @@ final class RootImageDownloadAction
      */
     private $files;
 
+    /**
+     * @var MeasureRepository
+     */
+    private $measures;
+
     public function __construct(
         EntityManager $em,
         FileResponder $responder,
-        FileRepository $files
+        FileRepository $files,
+        MeasureRepository $measures
     ) {
         $this->em = $em;
         $this->responder = $responder;
         $this->files = $files;
+        $this->measures = $measures;
     }
 
-    public function __invoke($id, Request $request, Response $response)
+    public function __invoke($meta_id, $measure_id, Request $request, Response $response)
     {
-        $rootImage = $this->files->find($id);
-        return $this->responder->download($response, $rootImage);
+        $rootImage = $this->measures->find($measure_id)->rootImage;
+        return $this->responder->show($response, $rootImage);
     }
 }
