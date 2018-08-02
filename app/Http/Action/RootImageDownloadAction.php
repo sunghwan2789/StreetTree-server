@@ -2,12 +2,13 @@
 namespace App\Http\Action;
 
 use Doctrine\ORM\EntityManager;
-use App\Http\Responder\RootImageResponder;
+use App\Http\Responder\FileResponder;
 use Slim\Http\Request;
 use Slim\Http\Response;
-use App\Entity\RootImage;
+use App\Entity\File;
 use App\Repository\UserRepository;
-use App\Repository\RootImageRepository;
+use App\Repository\FileRepository;
+use App\Repository\MeasureRepository;
 
 final class RootImageDownloadAction
 {
@@ -17,28 +18,35 @@ final class RootImageDownloadAction
     private $em;
 
     /**
-     * @var RootImageResponder
+     * @var FileResponder
      */
     private $responder;
 
     /**
-     * @var RootImageRepository
+     * @var FileRepository
      */
-    private $rootImages;
+    private $files;
+
+    /**
+     * @var MeasureRepository
+     */
+    private $measures;
 
     public function __construct(
         EntityManager $em,
-        RootImageResponder $responder,
-        RootImageRepository $rootImages
+        FileResponder $responder,
+        FileRepository $files,
+        MeasureRepository $measures
     ) {
         $this->em = $em;
         $this->responder = $responder;
-        $this->rootImages = $rootImages;
+        $this->files = $files;
+        $this->measures = $measures;
     }
 
-    public function __invoke($id, Request $request, Response $response)
+    public function __invoke($meta_id, $measure_id, Request $request, Response $response)
     {
-        $rootImage = $this->rootImages->find($id);
-        return $this->responder->download($response, $rootImage);
+        $rootImage = $this->measures->find($measure_id)->rootImage;
+        return $this->responder->show($response, $rootImage);
     }
 }

@@ -6,7 +6,8 @@
         "doctrine/orm": "^2.6",
         "doctrine/migrations": "^1.8",
         "tuupola/slim-jwt-auth": "^3.0",
-        "firebase/php-jwt": "^5.0"
+        "firebase/php-jwt": "^5.0",
+        "ramsey/uuid": "^3.8"
     },
     "autoload": {
         "psr-4": {

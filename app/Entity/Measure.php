@@ -69,9 +69,9 @@ class Measure
     public $points;
 
     /**
-     * @var \App\Entity\RootImage 수목 뿌리 사진
+     * @var \App\Entity\File 수목 뿌리 사진
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\RootImage")
+     * @ORM\ManyToOne(targetEntity="App\Entity\File")
      */
     public $rootImage;
 

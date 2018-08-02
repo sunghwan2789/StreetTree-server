@@ -1,11 +1,11 @@
 <?php
 namespace App\Repository;
 
-use App\Entity\RootImage;
+use App\Entity\Measure;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 
-final class RootImageRepository
+final class MeasureRepository
 {
     /**
      * @var EntityRepository
@@ -14,10 +14,10 @@ final class RootImageRepository
 
     public function __construct(EntityManager $entityManager)
     {
-        $this->repository = $entityManager->getRepository(RootImage::class);
+        $this->repository = $entityManager->getRepository(Measure::class);
     }
 
-    public function find($id): ?RootImage
+    public function find($id): ?Measure
     {
         return $this->repository->find($id);
     }
