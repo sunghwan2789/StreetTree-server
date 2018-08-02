@@ -5,6 +5,8 @@ use Psr\Container\ContainerInterface;
 return [
     'settings.storagePath' => __DIR__ . '/../storage',
 
+    'settings.fileStoragePath' => __DIR__ . '/../storage/files',
+
     'settings.doctrine' => [
         'meta' => [
             'entity_path' => [

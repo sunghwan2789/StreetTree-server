@@ -41,32 +41,25 @@ class File
     public $size;
 
     /**
-     * @var string 유형
+     * @var string 업로드 시 유형
      *
      * @ORM\Column(type="string")
      */
-    public $mimeType;
+    public $dispositionMimeType;
 
     /**
-     * @var string 확장자
+     * @var string 업로드 시 이름
      *
      * @ORM\Column(type="string")
      */
-    public $extension;
+    public $dispositionFilename;
 
     /**
-     * @var string 이름
+     * @var string 저장소 내 이름
      *
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string")
      */
     public $filename;
-
-    /**
-     * @var resource 데이터
-     *
-     * @ORM\Column(type="blob")
-     */
-    public $data;
 
     /**
      * @var \App\Entity\User 소유자

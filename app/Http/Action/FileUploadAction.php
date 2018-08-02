@@ -2,11 +2,14 @@
 namespace App\Http\Action;
 
 use Doctrine\ORM\EntityManager;
-use App\Http\Responder\RootImageResponder;
+use App\Http\Responder\FileResponder;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use App\Entity\File;
 use App\Repository\UserRepository;
+use Slim\Http\UploadedFile;
+use Ramsey\Uuid\Uuid;
+use Slim\Container;
 
 final class FileUploadAction
 {
@@ -16,7 +19,7 @@ final class FileUploadAction
     private $em;
 
     /**
-     * @var RootImageResponder
+     * @var FileResponder
      */
     private $responder;
 
@@ -25,33 +28,50 @@ final class FileUploadAction
      */
     private $users;
 
+    /**
+     * @var string
+     */
+    private $fileStorage;
+
     public function __construct(
         EntityManager $em,
-        RootImageResponder $responder,
-        UserRepository $users
+        FileResponder $responder,
+        UserRepository $users,
+        Container $container
     ) {
         $this->em = $em;
         $this->responder = $responder;
         $this->users = $users;
+        $this->fileStorage = $container->get('settings.fileStoragePath');
+    }
+
+    public function getUploadedFile($request): UploadedFile
+    {
+        return $request->getUploadedFiles()['file'];
     }
 
     public function __invoke(Request $request, Response $response)
     {
-        $body = $request->getBody();
-        $data = $body->getContents();
-        $mimeInfo = new \finfo(FILEINFO_MIME_TYPE);
-        $extInfo = new \finfo(FILEINFO_EXTENSION);
+        $uploadedFile = $this->getUploadedFile($request);
+        $filename = Uuid::uuid4()->toString();
+        $uploadedFile->moveTo($this->fileStorage . '/' . $filename);
+
+        $hash_crc32 = hash_file('crc32b', $this->fileStorage . '/' . $filename);
+        $size = $uploadedFile->getSize();
+        $dispositionMimeType = $uploadedFile->getClientMediaType();
+        $dispositionFilename = $uploadedFile->getClientFilename();
+
 
         $userId = $request->getAttribute(getenv('JWTAUTH_NAME'))['i'];
         $user = $this->users->find($userId);
 
         $rootImage = new File();
-        $rootImage->hash_crc32 = hash('crc32b', $data);
+        $rootImage->hash_crc32 = $hash_crc32;
         $rootImage->createdAt = new \DateTime();
-        $rootImage->size = strlen($data);
-        $rootImage->mimeType = $mimeInfo->buffer($data);
-        $rootImage->extension = $extInfo->buffer($data);
-        $rootImage->data = $data;
+        $rootImage->size = $size;
+        $rootImage->dispositionMimeType = $dispositionMimeType;
+        $rootImage->dispositionFilename = $dispositionFilename;
+        $rootImage->filename = $filename;
         $rootImage->owner = $user;
         $this->em->persist($rootImage);
         $this->em->flush();
