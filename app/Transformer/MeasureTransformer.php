@@ -3,15 +3,12 @@ namespace App\Transformer;
 
 use League\Fractal\TransformerAbstract;
 use App\Entity\Measure;
+use Slim\Router;
 
 class MeasureTransformer extends TransformerAbstract
 {
     protected $availableIncludes = [
         'measureset',
-    ];
-
-    protected $defaultIncludes = [
-        'rootImage',
     ];
 
     public function transform(Measure $measure)
@@ -32,14 +29,9 @@ class MeasureTransformer extends TransformerAbstract
             'treeNumber'     => $measure->treeNumber,
             'isInstalled'    => $measure->isInstalled,
             'points'         => $measure->points,
+            'rootImageUrl'   => $measure->rootImage !== null
+                ? '/measure/'.$measure->measureset->id.'/'.$measure->id.'/root-image'
+                : null,
         ];
-    }
-
-    public function includeRootImage(Measure $measure)
-    {
-        // FIXME: NULL이면 필드가 생략되는 문제
-        return $measure->rootImage
-            ? $this->item($measure->rootImage, new FileTransformer)
-            : $this->null();
     }
 }
