@@ -27,6 +27,6 @@ class MeasureResponder
     public function show(Response $response, Measureset $measureSet): Response
     {
         return $response->withStatus(200)
-            ->withJson($measureSet);
+            ->withJson($this->transformer->item($measureSet, new MeasuresetTransformer));
     }
 }

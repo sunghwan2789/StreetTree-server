@@ -39,6 +39,9 @@ class MeasureTransformer extends TransformerAbstract
 
     public function includeRootImage(Measure $measure)
     {
-        return $this->item($measure->rootImage, new FileTransformer);
+        // FIXME: NULL이면 필드가 생략되는 문제
+        return $measure->rootImage
+            ? $this->item($measure->rootImage, new FileTransformer)
+            : $this->null();
     }
 }
