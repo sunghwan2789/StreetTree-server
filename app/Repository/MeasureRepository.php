@@ -21,4 +21,28 @@ final class MeasureRepository
     {
         return $this->repository->find($id);
     }
+
+    public function findByCode(...$codes)
+    {
+        @[$siCode, $guCode, $dongCode] = $codes;
+        $qb = $this->repository->createQueryBuilder('m')
+            ->select('m')
+            ->where('m.siCode = :siCode')
+            ->setParameter('siCode', $siCode);
+        if (isset($guCode)) {
+            $qb->where($qb->expr()->andX()
+                ->add('m.siCode = :siCode')
+                ->add('m.guCode = :guCode'))
+            ->setParameter('guCode', $guCode);
+        }
+        if (isset($dongCode)) {
+            $qb->where($qb->expr()->andX()
+                ->add('m.siCode = :siCode')
+                ->add('m.guCode = :guCode')
+                ->add('m.dongCode = :dongCode'))
+            ->setParameter('dongCode', $dongCode);
+        }
+        $query = $qb->getQuery();
+        return $query->getResult();
+    }
 }
