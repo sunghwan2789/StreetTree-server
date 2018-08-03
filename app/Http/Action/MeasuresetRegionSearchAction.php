@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Action;
 
-use App\Http\Responder\RegionResponder;
+use App\Http\Responder\MeasuresetResponder;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use App\Repository\MeasureRepository;
@@ -10,10 +10,10 @@ use App\Entity\Measure;
 use App\Repository\MeasuresetRepository;
 
 
-class RegionMeasuresetSearchAction
+class MeasuresetRegionSearchAction
 {
     /**
-     * @var RegionResponder
+     * @var MeasuresetResponder
      */
     private $responder;
 
@@ -23,7 +23,7 @@ class RegionMeasuresetSearchAction
     private $measuresets;
 
     public function __construct(
-        RegionResponder $responder,
+        MeasuresetResponder $responder,
         MeasuresetRepository $measuresets
     ) {
         $this->responder = $responder;

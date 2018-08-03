@@ -29,4 +29,10 @@ class MeasuresetResponder
         return $response->withStatus(200)
             ->withJson($this->transformer->item($measureSet, new MeasuresetTransformer));
     }
+
+    public function collection(Response $response, $measuresets): Response
+    {
+        return $response->withStatus(200)
+            ->withJson($this->transformer->collection($measuresets, new MeasuresetTransformer));
+    }
 }
