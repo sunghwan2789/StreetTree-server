@@ -10,7 +10,7 @@ use App\Entity\Measure;
 use App\Repository\MeasuresetRepository;
 
 
-class RegionMeasureSearchAction
+class RegionMeasuresetSearchAction
 {
     /**
      * @var RegionResponder
@@ -18,30 +18,21 @@ class RegionMeasureSearchAction
     private $responder;
 
     /**
-     * @var MeasureRepository
+     * @var MeasureetRepository
      */
-    private $measures;
-
-    /**
-     * @var EntityManager
-     */
-    private $em;
+    private $measuresets;
 
     public function __construct(
         RegionResponder $responder,
-        MeasureRepository $measures,
-        MeasuresetRepository $measuresets,
-        EntityManager $em
+        MeasuresetRepository $measuresets
     ) {
         $this->responder = $responder;
-        $this->measures = $measures;
         $this->measuresets = $measuresets;
-        $this->em = $em;
     }
 
     public function __invoke($codes, Request $request, Response $response)
     {
-        $measures = $this->measures->findByCode(explode('/', $codes));
+        $measuresets = $this->measuresets->findByCode(explode('/', $codes));
         return $this->responder->collection($response, $measures);
     }
 }

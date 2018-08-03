@@ -13,7 +13,7 @@ $app->post('/upload', App\Http\Action\FileUploadAction::class);
 $app->post('/measureset/new', App\Http\Action\MeasuresetPostAction::class);
 $app->get('/measureset/{measureset_id}', App\Http\Action\MeasuresetShowAction::class);
 $app->get('/measure/{measure_id}/root-image', App\Http\Action\RootImageDownloadAction::class);
-$app->get('/region/{codes:.*}', App\Http\Action\RegionMeasureSearchAction::class);
+$app->get('/region/{codes:.*}', App\Http\Action\RegionMeasuresetSearchAction::class);
 
 $app->add(Tuupola\Middleware\JwtAuthentication::class);
 
