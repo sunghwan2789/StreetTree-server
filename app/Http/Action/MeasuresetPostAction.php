@@ -9,9 +9,9 @@ use App\Entity\Measure;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Repository\FileRepository;
-use App\Http\Responder\MeasureResponder;
+use App\Http\Responder\MeasuresetResponder;
 
-class MeasureCreateAction
+class MeasuresetPostAction
 {
     /**
      * @var EntityManager
@@ -19,7 +19,7 @@ class MeasureCreateAction
     private $em;
 
     /**
-     * @var MeasureResponder
+     * @var MeasuresetResponder
      */
     private $responder;
 
@@ -35,7 +35,7 @@ class MeasureCreateAction
 
     public function __construct(
         EntityManager $em,
-        MeasureResponder $responder,
+        MeasuresetResponder $responder,
         UserRepository $users,
         FileRepository $files
     ) {

@@ -6,7 +6,7 @@ use App\Entity\Measureset;
 use App\Service\Transformer;
 use App\Transformer\MeasuresetTransformer;
 
-class MeasureResponder
+class MeasuresetResponder
 {
     /**
      * @var Transformer
