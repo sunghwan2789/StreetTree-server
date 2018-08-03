@@ -45,21 +45,21 @@ class Measure
      *
      * @ORM\Column(type="string", nullable=true)
      */
-    public $regionCode_sido;
+    public $sidoCode;
 
     /**
      * @var string|null 지역코드(군)
      *
      * @ORM\Column(type="string", nullable=true)
      */
-    public $regionCode_goon;
+    public $goonCode;
 
     /**
      * @var string|null 지역코드(구)
      *
-     * @ORM\Column(type="string", nullable=ture)
+     * @ORM\Column(type="string", nullable=true)
      */
-    public $regionCode_gu;
+    public $guCode;
 
     /**
      * @var string|null 보호판 이름?
