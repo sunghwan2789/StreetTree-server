@@ -9,6 +9,7 @@ use App\Entity\Measure;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Repository\FileRepository;
+use App\Http\Responder\MeasureResponder;
 
 class MeasureCreateAction
 {
@@ -16,6 +17,11 @@ class MeasureCreateAction
      * @var EntityManager
      */
     private $em;
+
+    /**
+     * @var MeasureResponder
+     */
+    private $responder;
 
     /**
      * @var UserRepository
@@ -29,10 +35,12 @@ class MeasureCreateAction
 
     public function __construct(
         EntityManager $em,
+        MeasureResponder $responder,
         UserRepository $users,
         FileRepository $files
     ) {
         $this->em = $em;
+        $this->responder = $responder;
         $this->users = $users;
         $this->files = $files;
     }
@@ -78,9 +86,6 @@ class MeasureCreateAction
 
         $this->em->commit();
 
-        return $response->withStatus(201)
-            ->withJson([
-                'id' => $measureset->id,
-            ]);
+        return $this->responder->success($response, $measureset);
     }
 }
