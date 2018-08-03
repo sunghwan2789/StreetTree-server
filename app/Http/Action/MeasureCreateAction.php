@@ -53,8 +53,6 @@ class MeasureCreateAction
         $user = $this->users->find($userId);
 
         $measureset = new Measureset();
-        // TODO: 앱에서 전송 안 해서 미구현
-        // $measureset->siteRegionCode = $request->getParsedBodyParam('siteRegionCode');
         $measureset->siteName = $request->getParsedBodyParam('siteName');
         $measureset->clientName = $request->getParsedBodyParam('clientName');
         $measureset->createdAt = new \DateTime($request->getParsedBodyParam('createdAt'));
@@ -73,6 +71,9 @@ class MeasureCreateAction
             $measure->sequenceNumber = $item['sequenceNumber'];
             $measure->latitude = $item['latitude'];
             $measure->longitude = $item['longitude'];
+            $measure->sidoCode = $item['sido'];
+            $measure->goonCode = $item['goon'];
+            $measure->guCode = $item['gu'];
             $measure->plateName = $item['plateName'];
             $measure->treeNumber = $item['treeNumber'];
             $measure->isInstalled = $item['isInstalled'];
