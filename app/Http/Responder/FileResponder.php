@@ -4,15 +4,25 @@ namespace App\Http\Responder;
 use Slim\Http\Response;
 use App\Entity\File;
 use Slim\Http\Body;
+use App\Service\Transformer;
+use App\Transformer\FileTransformer;
 
 final class FileResponder
 {
+    /**
+     * @var Transformer
+     */
+    private $transformer;
+
+    public function __construct(Transformer $transformer)
+    {
+        $this->transformer = $transformer;
+    }
+
     public function success(Response $response, File $file)
     {
         return $response->withStatus(201)
-            ->withJson([
-                'id' => $file->id,
-            ]);
+            ->withJson($this->transformer->item($file, new FileTransformer));
     }
 
     public function show(Response $response, File $file)
