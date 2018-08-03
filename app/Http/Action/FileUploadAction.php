@@ -57,6 +57,7 @@ final class FileUploadAction
         $filename = Uuid::uuid4()->toString();
 
         $uploadedFile = $this->getUploadedFile($request);
+        $filename .= '.' . pathinfo($uploadedFile->getClientFilename(), PATHINFO_EXTENSION);
         $uploadedFile->moveTo($this->fileStorage . '/' . $filename);
 
         $checksum_crc32   = hash_file('crc32b', $this->fileStorage . '/' . $filename);
