@@ -20,11 +20,11 @@ class File
     public $id;
 
     /**
-     * @var string crc32 해시값
+     * @var string crc32 체크섬
      *
      * @ORM\Column(type="string")
      */
-    public $hash_crc32;
+    public $checksum_crc32;
 
     /**
      * @var \DateTime 업로드 시각(UTC)

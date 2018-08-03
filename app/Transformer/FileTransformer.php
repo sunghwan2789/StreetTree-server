@@ -17,8 +17,8 @@ class FileTransformer extends TransformerAbstract
             'file_id'   => $file->id,
             'createdAt' => $file->createdAt->format(DATE_ATOM),
             'filename'  => $file->originalFilename,
-            'hash' => [
-                'crc32' => $file->hash_crc32,
+            'checksum' => [
+                'crc32' => $file->checksum_crc32,
             ],
             'mediaType' => $file->mediaType,
             'size'      => $file->size,

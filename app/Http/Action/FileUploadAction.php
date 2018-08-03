@@ -59,7 +59,7 @@ final class FileUploadAction
         $uploadedFile = $this->getUploadedFile($request);
         $uploadedFile->moveTo($this->fileStorage . '/' . $filename);
 
-        $hash_crc32       = hash_file('crc32b', $this->fileStorage . '/' . $filename);
+        $checksum_crc32   = hash_file('crc32b', $this->fileStorage . '/' . $filename);
         $size             = $uploadedFile->getSize();
         $mediaType        = $uploadedFile->getClientMediaType();
         $originalFilename = $uploadedFile->getClientFilename();
@@ -69,7 +69,7 @@ final class FileUploadAction
         $user = $this->users->find($userId);
 
         $rootImage = new File();
-        $rootImage->hash_crc32       = $hash_crc32;
+        $rootImage->checksum_crc32   = $checksum_crc32;
         $rootImage->createdAt        = new \DateTime();
         $rootImage->size             = $size;
         $rootImage->mediaType        = $mediaType;
