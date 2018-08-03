@@ -4,18 +4,17 @@ namespace App\Transformer;
 use League\Fractal\TransformerAbstract;
 use App\Entity\Measureset;
 
-
 class MeasuresetTransformer extends TransformerAbstract
 {
     /**
      * @inheritdoc
      */
-    protected $availableIncludes = ['author'];
+    protected $availableIncludes = ['author', 'measures'];
 
     /**
      * @inheritdoc
      */
-    protected $defaultIncludes = ['author'];
+    protected $defaultIncludes = ['author', 'measures'];
 
     public function transform(Measureset $measureset)
     {
@@ -32,8 +31,8 @@ class MeasuresetTransformer extends TransformerAbstract
         return $this->item($measureset->author, new UserTransformer);
     }
 
-    // public function includeMeasures(Measureset $measureset)
-    // {
-    //     return $this->collection($measureset->measures, new MeasureTransformer);
-    // }
+    public function includeMeasures(Measureset $measureset)
+    {
+        return $this->collection($measureset->measures, new MeasureTransformer);
+    }
 }

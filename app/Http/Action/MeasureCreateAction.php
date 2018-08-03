@@ -79,6 +79,7 @@ class MeasureCreateAction
             $measure->points = $item['points'];
             $measure->rootImage = $rootImage;
             $measure->measureset = $measureset;
+            $measureset->measures[] = $measure;
 
             $this->em->persist($measure);
         }
