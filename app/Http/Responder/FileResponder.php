@@ -27,11 +27,11 @@ final class FileResponder
 
     private function send(Response $response, File $file, string $dispositionType)
     {
-        $filename = $file->dispositionFilename;
-        $unicodeFilename = rawurlencode($file->dispositionFilename);
+        $filename = $file->originalFilename;
+        $unicodeFilename = rawurlencode($file->originalFilename);
         // TODO: 206 상태 코드 지원하기
         return $response->withStatus(200)
-            ->withHeader('Content-Type', $file->dispositionMimeType)
+            ->withHeader('Content-Type', $file->mediaType)
             ->withHeader('Content-Disposition', $dispositionType
                 . "; filename=\"$filename\""
                 . "; filename*=UTF-8\'\'$unicodeFilename")

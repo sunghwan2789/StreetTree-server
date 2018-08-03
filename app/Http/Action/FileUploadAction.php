@@ -60,8 +60,8 @@ final class FileUploadAction
 
         $hash_crc32 = hash_file('crc32b', $this->fileStorage . '/' . $filename);
         $size = $uploadedFile->getSize();
-        $dispositionMimeType = $uploadedFile->getClientMediaType();
-        $dispositionFilename = $uploadedFile->getClientFilename();
+        $mediaType = $uploadedFile->getClientMediaType();
+        $originalFilename = $uploadedFile->getClientFilename();
 
 
         $userId = $request->getAttribute(getenv('JWTAUTH_NAME'))['i'];
@@ -71,8 +71,8 @@ final class FileUploadAction
         $rootImage->hash_crc32 = $hash_crc32;
         $rootImage->createdAt = new \DateTime();
         $rootImage->size = $size;
-        $rootImage->dispositionMimeType = $dispositionMimeType;
-        $rootImage->dispositionFilename = $dispositionFilename;
+        $rootImage->mediaType = $mediaType;
+        $rootImage->originalFilename = $originalFilename;
         $rootImage->filename = $filename;
         $rootImage->owner = $user;
         $this->em->persist($rootImage);

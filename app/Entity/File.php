@@ -45,14 +45,14 @@ class File
      *
      * @ORM\Column(type="string")
      */
-    public $dispositionMimeType;
+    public $mediaType;
 
     /**
      * @var string 업로드 시 이름
      *
      * @ORM\Column(type="string")
      */
-    public $dispositionFilename;
+    public $originalFilename;
 
     /**
      * @var string 저장소 내 이름
