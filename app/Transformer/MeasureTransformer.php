@@ -15,6 +15,7 @@ class MeasureTransformer extends TransformerAbstract
     {
         return [
             'measure_id'     => $measure->id,
+            'measureset_id'  => $measure->measureset->id,
             'sequenceNumber' => $measure->sequenceNumber,
             'coordinate' => [
                 'latitude'   => $measure->latitude,
