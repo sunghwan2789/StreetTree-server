@@ -71,9 +71,9 @@ class MeasureCreateAction
             $measure->sequenceNumber = $item['sequenceNumber'];
             $measure->latitude       = $item['latitude'];
             $measure->longitude      = $item['longitude'];
-            $measure->sidoCode       = $item['sido'];
-            $measure->goonCode       = $item['goon'];
-            $measure->guCode         = $item['gu'];
+            $measure->siCode         = $item['sido'];
+            $measure->guCode         = $item['goon'];
+            $measure->dongCode       = $item['gu'];
             $measure->plateName      = $item['plateName'];
             $measure->treeNumber     = $item['treeNumber'];
             $measure->isInstalled    = $item['isInstalled'];

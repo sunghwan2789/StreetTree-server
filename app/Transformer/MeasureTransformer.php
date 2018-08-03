@@ -21,9 +21,9 @@ class MeasureTransformer extends TransformerAbstract
                 'longitude'  => $measure->longitude,
             ],
             'region' => [
-                'sidoCode'   => $measure->sidoCode,
-                'goonCode'   => $measure->goonCode,
+                'siCode'     => $measure->siCode,
                 'guCode'     => $measure->guCode,
+                'dongCode'   => $measure->dongCode,
             ],
             'plateName'      => $measure->plateName,
             'treeNumber'     => $measure->treeNumber,
