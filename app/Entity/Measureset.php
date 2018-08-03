@@ -48,13 +48,6 @@ class Measureset
     public $author;
 
     /**
-     * @var string 담당자 성명
-     *
-     * @ORM\Column(type="text")
-     */
-    public $authorFullName;
-
-    /**
      * @var \App\Entity\Measure[]
      *
      * @ORM\OneToMany(targetEntity="App\Entity\Measure", mappedBy="measureset")
