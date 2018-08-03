@@ -6,34 +6,32 @@ use App\Entity\Measure;
 
 class MeasureTransformer extends TransformerAbstract
 {
-    /**
-     * @inheritdoc
-     */
-    protected $availableIncludes = ['rootImage', 'measureset'];
+    protected $availableIncludes = [
+        'measureset',
+    ];
 
-    /**
-     * @inheritdoc
-     */
-    protected $defaultIncludes = ['rootImage'];
+    protected $defaultIncludes = [
+        'rootImage',
+    ];
 
     public function transform(Measure $measure)
     {
         return [
-            'measure_id'    => $measure->id,
+            'measure_id'     => $measure->id,
             'sequenceNumber' => $measure->sequenceNumber,
             'coordinate' => [
-                'latitude'  => $measure->latitude,
-                'longitude' => $measure->longitude,
+                'latitude'   => $measure->latitude,
+                'longitude'  => $measure->longitude,
             ],
             'region' => [
-                'sidoCode'  => $measure->sidoCode,
-                'goonCode'  => $measure->goonCode,
-                'guCode'    => $measure->guCode,
+                'sidoCode'   => $measure->sidoCode,
+                'goonCode'   => $measure->goonCode,
+                'guCode'     => $measure->guCode,
             ],
-            'plateName'     => $measure->plateName,
-            'treeNumber'    => $measure->treeNumber,
-            'isInstalled'   => $measure->isInstalled,
-            'points'        => $measure->points,
+            'plateName'      => $measure->plateName,
+            'treeNumber'     => $measure->treeNumber,
+            'isInstalled'    => $measure->isInstalled,
+            'points'         => $measure->points,
         ];
     }
 

@@ -50,13 +50,13 @@ class MeasureCreateAction
         $this->em->beginTransaction();
 
         $userId = $request->getAttribute(getenv('JWTAUTH_NAME'))['i'];
-        $user = $this->users->find($userId);
+        $user   = $this->users->find($userId);
 
         $measureset = new Measureset();
-        $measureset->siteName = $request->getParsedBodyParam('siteName');
-        $measureset->clientName = $request->getParsedBodyParam('clientName');
-        $measureset->createdAt = new \DateTime($request->getParsedBodyParam('createdAt'));
-        $measureset->author = $user;
+        $measureset->siteName       = $request->getParsedBodyParam('siteName');
+        $measureset->clientName     = $request->getParsedBodyParam('clientName');
+        $measureset->createdAt      = new \DateTime($request->getParsedBodyParam('createdAt'));
+        $measureset->author         = $user;
         $measureset->authorFullName = $user->fullName;
         $this->em->persist($measureset);
         $this->em->flush();
@@ -69,17 +69,17 @@ class MeasureCreateAction
 
             $measure = new Measure();
             $measure->sequenceNumber = $item['sequenceNumber'];
-            $measure->latitude = $item['latitude'];
-            $measure->longitude = $item['longitude'];
-            $measure->sidoCode = $item['sido'];
-            $measure->goonCode = $item['goon'];
-            $measure->guCode = $item['gu'];
-            $measure->plateName = $item['plateName'];
-            $measure->treeNumber = $item['treeNumber'];
-            $measure->isInstalled = $item['isInstalled'];
-            $measure->points = $item['points'];
-            $measure->rootImage = $rootImage;
-            $measure->measureset = $measureset;
+            $measure->latitude       = $item['latitude'];
+            $measure->longitude      = $item['longitude'];
+            $measure->sidoCode       = $item['sido'];
+            $measure->goonCode       = $item['goon'];
+            $measure->guCode         = $item['gu'];
+            $measure->plateName      = $item['plateName'];
+            $measure->treeNumber     = $item['treeNumber'];
+            $measure->isInstalled    = $item['isInstalled'];
+            $measure->points         = $item['points'];
+            $measure->rootImage      = $rootImage;
+            $measure->measureset     = $measureset;
             $measureset->measures[] = $measure;
 
             $this->em->persist($measure);

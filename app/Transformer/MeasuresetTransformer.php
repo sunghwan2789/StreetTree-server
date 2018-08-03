@@ -6,23 +6,18 @@ use App\Entity\Measureset;
 
 class MeasuresetTransformer extends TransformerAbstract
 {
-    /**
-     * @inheritdoc
-     */
-    protected $availableIncludes = ['author', 'measures'];
-
-    /**
-     * @inheritdoc
-     */
-    protected $defaultIncludes = ['author', 'measures'];
+    protected $defaultIncludes = [
+        'author',
+        'measures',
+    ];
 
     public function transform(Measureset $measureset)
     {
         return [
             'measureset_id' => $measureset->id,
-            'siteName' => $measureset->siteName,
-            'clientName' => $measureset->clientName,
-            'createdAt' => $measureset->createdAt->format('Y-m-d'),
+            'siteName'      => $measureset->siteName,
+            'clientName'    => $measureset->clientName,
+            'createdAt'     => $measureset->createdAt->format('Y-m-d'),
         ];
     }
 
