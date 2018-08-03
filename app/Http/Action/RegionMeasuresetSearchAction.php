@@ -18,7 +18,7 @@ class RegionMeasuresetSearchAction
     private $responder;
 
     /**
-     * @var MeasureetRepository
+     * @var MeasuresetRepository
      */
     private $measuresets;
 
@@ -32,7 +32,7 @@ class RegionMeasuresetSearchAction
 
     public function __invoke($codes, Request $request, Response $response)
     {
-        $measuresets = $this->measuresets->findByCode(explode('/', $codes));
-        return $this->responder->collection($response, $measures);
+        $measuresets = $this->measuresets->findByCode(...explode('/', $codes));
+        return $this->responder->collection($response, $measuresets);
     }
 }

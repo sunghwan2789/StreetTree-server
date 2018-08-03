@@ -30,16 +30,11 @@ final class MeasureRepository
             ->where('m.siCode = :siCode')
             ->setParameter('siCode', $siCode);
         if (isset($guCode)) {
-            $qb->where($qb->expr()->andX()
-                ->add('m.siCode = :siCode')
-                ->add('m.guCode = :guCode'))
+            $qb->andWhere('m.guCode = :guCode')
             ->setParameter('guCode', $guCode);
         }
         if (isset($dongCode)) {
-            $qb->where($qb->expr()->andX()
-                ->add('m.siCode = :siCode')
-                ->add('m.guCode = :guCode')
-                ->add('m.dongCode = :dongCode'))
+            $qb->andWhere('m.dongCode = :dongCode')
             ->setParameter('dongCode', $dongCode);
         }
         $query = $qb->getQuery();
