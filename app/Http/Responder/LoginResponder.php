@@ -3,18 +3,26 @@ namespace App\Http\Responder;
 
 use Slim\Http\Response;
 use App\Entity\User;
+use App\Transformer\UserTransformer;
+use App\Service\Transformer;
 
 class LoginResponder
 {
+    /**
+     * @var Transformer
+     */
+    private $transformer;
+
+    public function __construct(Transformer $transformer)
+    {
+        $this->transformer = $transformer;
+    }
+
     public function grant(Response $response, string $token, User $user): Response
     {
         setcookie(getenv('JWTAUTH_NAME'), $token, time() + 72800, '/', '', false /* sync with settings.jwtauth.secure */, true);
         return $response->withStatus(200)
-            ->withJson([
-                'id' => $user->id,
-                'username' => $user->username,
-                'full_name' => $user->fullName,
-            ]);
+            ->withJson($this->transformer->item($user, new UserTransformer()));
     }
 
     public function userNotFound(Response $response): Response

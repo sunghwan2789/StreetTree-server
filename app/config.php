@@ -17,12 +17,12 @@ return [
             'cache'       => null,
         ],
         'connection' => [
-            'driver' => 'pdo_mysql',
-            'host' => getenv('DB_HOST'),
-            'dbname' => getenv('DB_DATABASE'),
-            'user' => getenv('DB_USERNAME'),
+            'driver'   => 'pdo_mysql',
+            'host'     => getenv('DB_HOST'),
+            'dbname'   => getenv('DB_DATABASE'),
+            'user'     => getenv('DB_USERNAME'),
             'password' => getenv('DB_PASSWORD'),
-            'charset' => 'utf8mb4',
+            'charset'  => 'utf8mb4',
             'defaultTableOptions' => [
                 'charset' => 'utf8mb4',
                 'collate' => 'utf8mb4_unicode_ci',
@@ -31,12 +31,12 @@ return [
     ],
 
     'settings.jwtauth' => [
-        'path' => ['/'],
-        'ignore' => ['/login'],
-        'secure' => false,
-        'cookie' => getenv('JWTAUTH_NAME'),
+        'path'      => ['/'],
+        'ignore'    => ['/login'],
+        'secure'    => false,
+        'cookie'    => getenv('JWTAUTH_NAME'),
         'attribute' => getenv('JWTAUTH_NAME'),
-        'secret' => getenv('JWTAUTH_SECRET'),
+        'secret'    => getenv('JWTAUTH_SECRET'),
     ],
 
     App\Service\DumpService::class => function (ContainerInterface $c) {

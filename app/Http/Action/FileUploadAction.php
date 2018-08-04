@@ -54,27 +54,29 @@ final class FileUploadAction
 
     public function __invoke(Request $request, Response $response)
     {
-        $uploadedFile = $this->getUploadedFile($request);
         $filename = Uuid::uuid4()->toString();
+
+        $uploadedFile = $this->getUploadedFile($request);
+        $filename .= '.' . pathinfo($uploadedFile->getClientFilename(), PATHINFO_EXTENSION);
         $uploadedFile->moveTo($this->fileStorage . '/' . $filename);
 
-        $hash_crc32 = hash_file('crc32b', $this->fileStorage . '/' . $filename);
-        $size = $uploadedFile->getSize();
-        $dispositionMimeType = $uploadedFile->getClientMediaType();
-        $dispositionFilename = $uploadedFile->getClientFilename();
+        $checksum_crc32   = hash_file('crc32b', $this->fileStorage . '/' . $filename);
+        $size             = $uploadedFile->getSize();
+        $mediaType        = $uploadedFile->getClientMediaType();
+        $originalFilename = $uploadedFile->getClientFilename();
 
 
         $userId = $request->getAttribute(getenv('JWTAUTH_NAME'))['i'];
         $user = $this->users->find($userId);
 
         $rootImage = new File();
-        $rootImage->hash_crc32 = $hash_crc32;
-        $rootImage->createdAt = new \DateTime();
-        $rootImage->size = $size;
-        $rootImage->dispositionMimeType = $dispositionMimeType;
-        $rootImage->dispositionFilename = $dispositionFilename;
-        $rootImage->filename = $filename;
-        $rootImage->owner = $user;
+        $rootImage->checksum_crc32   = $checksum_crc32;
+        $rootImage->createdAt        = new \DateTime();
+        $rootImage->size             = $size;
+        $rootImage->mediaType        = $mediaType;
+        $rootImage->originalFilename = $originalFilename;
+        $rootImage->filename         = $filename;
+        $rootImage->owner            = $user;
         $this->em->persist($rootImage);
         $this->em->flush();
 

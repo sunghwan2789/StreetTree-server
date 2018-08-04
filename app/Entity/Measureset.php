@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  */
-class MeasureMetadata
+class Measureset
 {
     /**
      * @var int
@@ -18,13 +18,6 @@ class MeasureMetadata
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     public $id;
-
-    /**
-     * @var string|null 현장 지역코드
-     *
-     * @ORM\Column(type="string", length=50, nullable=true)
-     */
-    public $siteRegionCode;
 
     /**
      * @var string 현장명
@@ -55,11 +48,11 @@ class MeasureMetadata
     public $author;
 
     /**
-     * @var string 담당자 성명
+     * @var \App\Entity\Measure[]
      *
-     * @ORM\Column(type="text")
+     * @ORM\OneToMany(targetEntity="App\Entity\Measure", mappedBy="measureset")
      */
-    public $authorFullName;
+    public $measures;
 
 
 }

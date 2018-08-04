@@ -20,11 +20,11 @@ class File
     public $id;
 
     /**
-     * @var string crc32 해시값
+     * @var string crc32 체크섬
      *
      * @ORM\Column(type="string")
      */
-    public $hash_crc32;
+    public $checksum_crc32;
 
     /**
      * @var \DateTime 업로드 시각(UTC)
@@ -45,14 +45,14 @@ class File
      *
      * @ORM\Column(type="string")
      */
-    public $dispositionMimeType;
+    public $mediaType;
 
     /**
      * @var string 업로드 시 이름
      *
      * @ORM\Column(type="string")
      */
-    public $dispositionFilename;
+    public $originalFilename;
 
     /**
      * @var string 저장소 내 이름

@@ -4,15 +4,25 @@ namespace App\Http\Responder;
 use Slim\Http\Response;
 use App\Entity\File;
 use Slim\Http\Body;
+use App\Service\Transformer;
+use App\Transformer\FileTransformer;
 
 final class FileResponder
 {
+    /**
+     * @var Transformer
+     */
+    private $transformer;
+
+    public function __construct(Transformer $transformer)
+    {
+        $this->transformer = $transformer;
+    }
+
     public function success(Response $response, File $file)
     {
         return $response->withStatus(201)
-            ->withJson([
-                'id' => $file->id,
-            ]);
+            ->withJson($this->transformer->item($file, new FileTransformer));
     }
 
     public function show(Response $response, File $file)
@@ -27,11 +37,11 @@ final class FileResponder
 
     private function send(Response $response, File $file, string $dispositionType)
     {
-        $filename = $file->dispositionFilename;
-        $unicodeFilename = rawurlencode($file->dispositionFilename);
+        $filename = $file->originalFilename;
+        $unicodeFilename = rawurlencode($file->originalFilename);
         // TODO: 206 상태 코드 지원하기
         return $response->withStatus(200)
-            ->withHeader('Content-Type', $file->dispositionMimeType)
+            ->withHeader('Content-Type', $file->mediaType)
             ->withHeader('Content-Disposition', $dispositionType
                 . "; filename=\"$filename\""
                 . "; filename*=UTF-8\'\'$unicodeFilename")

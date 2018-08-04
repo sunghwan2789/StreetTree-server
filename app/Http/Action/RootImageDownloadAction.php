@@ -44,7 +44,7 @@ final class RootImageDownloadAction
         $this->measures = $measures;
     }
 
-    public function __invoke($meta_id, $measure_id, Request $request, Response $response)
+    public function __invoke($measure_id, Request $request, Response $response)
     {
         $rootImage = $this->measures->find($measure_id)->rootImage;
         return $this->responder->show($response, $rootImage);

@@ -1,11 +1,11 @@
 <?php
 namespace App\Repository;
 
-use App\Entity\Measure;
+use App\Entity\Measureset;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 
-final class MeasureRepository
+final class MeasuresetRepository
 {
     /**
      * @var EntityRepository
@@ -14,10 +14,10 @@ final class MeasureRepository
 
     public function __construct(EntityManager $entityManager)
     {
-        $this->repository = $entityManager->getRepository(Measure::class);
+        $this->repository = $entityManager->getRepository(Measureset::class);
     }
 
-    public function find($id): ?Measure
+    public function find($id): ?Measureset
     {
         return $this->repository->find($id);
     }
@@ -25,9 +25,10 @@ final class MeasureRepository
     public function findByCode(...$codes)
     {
         @[$siCode, $guCode, $dongCode] = $codes;
-        $qb = $this->repository->createQueryBuilder('m')
-            ->select('m')
+        $qb = $this->repository->createQueryBuilder('s')
+            ->join('s.measures', 'm')
             ->where('m.siCode = :siCode')
+            ->groupBy('s')
             ->setParameter('siCode', $siCode);
         if (isset($guCode)) {
             $qb->andWhere('m.guCode = :guCode')
@@ -39,5 +40,13 @@ final class MeasureRepository
         }
         $query = $qb->getQuery();
         return $query->getResult();
+    }
+
+    public function findBySiteName($siteName)
+    {
+        $qb = $this->repository->createQueryBuilder('s')
+            ->where('s.siteName LIKE :siteName')
+            ->setParameter('siteName', "%$siteName%");
+        return $qb->getQuery()->getResult();
     }
 }

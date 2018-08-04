@@ -41,6 +41,27 @@ class Measure
     public $longitude;
 
     /**
+     * @var string|null 지역코드(시)
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    public $siCode;
+
+    /**
+     * @var string|null 지역코드(구)
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    public $guCode;
+
+    /**
+     * @var string|null 지역코드(동)
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    public $dongCode;
+
+    /**
      * @var string|null 보호판 이름?
      *
      * @ORM\Column(type="text", nullable=true)
@@ -76,11 +97,11 @@ class Measure
     public $rootImage;
 
     /**
-     * @var \App\Entity\MeasureMetadata
+     * @var \App\Entity\Measureset
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\MeasureMetadata")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Measureset", inversedBy="measures")
      */
-    public $metadata;
+    public $measureset;
 
 
 }
