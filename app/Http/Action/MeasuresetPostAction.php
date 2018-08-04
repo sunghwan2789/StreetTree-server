@@ -57,7 +57,6 @@ class MeasuresetPostAction
         $measureset->clientName     = $request->getParsedBodyParam('clientName');
         $measureset->createdAt      = new \DateTime($request->getParsedBodyParam('createdAt'));
         $measureset->author         = $user;
-        $measureset->authorFullName = $user->fullName;
         $this->em->persist($measureset);
         $this->em->flush();
 
