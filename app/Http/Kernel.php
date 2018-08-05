@@ -3,8 +3,6 @@ namespace App\Http;
 
 use DI\Bridge\Slim\App;
 use DI\ContainerBuilder;
-use App\Provider\EntityManagerDefinition;
-use App\Provider\JwtAuthenticationDefinition;
 
 class Kernel extends App
 {
@@ -15,19 +13,19 @@ class Kernel extends App
     {
         $builder->addDefinitions(__DIR__ . '/../config.php');
 
-        foreach ($this->getContainerDefinitions() as $definition) {
-            $builder->addDefinitions($definition());
-        }
+        // foreach ($this->getContainerDefinitions() as $definition) {
+        //     $builder->addDefinitions($definition());
+        // }
     }
 
     /**
      * @return ContainerDefinitionInterface[]
      */
-    protected function getContainerDefinitions(): array
+    protected function getContainerDefinitions()
     {
         return [
-            new EntityManagerDefinition(),
-            new JwtAuthenticationDefinition(),
+            // new DoctrineDefinition(),
+            // new TwigDefinition(),
         ];
     }
 }

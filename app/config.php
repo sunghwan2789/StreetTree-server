@@ -38,4 +38,22 @@ return [
         'attribute' => getenv('JWTAUTH_NAME'),
         'secret'    => getenv('JWTAUTH_SECRET'),
     ],
+
+    Doctrine\ORM\EntityManager::class => function (ContainerInterface $c) {
+        $settings = $c->get('settings.doctrine');
+
+        $config = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(
+            $settings['meta']['entity_path'],
+            $settings['meta']['auto_generate_proxies'],
+            $settings['meta']['proxy_dir'],
+            $settings['meta']['cache'],
+            false
+        );
+
+        return Doctrine\ORM\EntityManager::create($settings['connection'], $config);
+    },
+
+    Tuupola\Middleware\JwtAuthentication::class => function (ContainerInterface $c) {
+        return new Tuupola\Middleware\JwtAuthentication($c->get('settings.jwtauth'));
+    },
 ];
