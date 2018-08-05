@@ -13,11 +13,11 @@ class AuthService
     /**
      * @var UserRepository
      */
-    private $repository;
+    private $users;
 
-    public function __construct(UserRepository $repository)
+    public function __construct(UserRepository $users)
     {
-        $this->repository = $repository;
+        $this->users = $users;
     }
 
     /**
