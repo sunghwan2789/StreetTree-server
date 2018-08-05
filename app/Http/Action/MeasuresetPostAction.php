@@ -62,7 +62,8 @@ class MeasuresetPostAction
 
         foreach ($request->getParsedBodyParam('list') as $item) {
             $rootImage = null;
-            if (!empty($item['rootImageId'])) {
+            if ($item['rootImageId'] !== null) {
+                // FIXME: [ "id" => 1 ] 등으로도 질의 가능
                 $rootImage = $this->files->find($item['rootImageId']);
             }
 
