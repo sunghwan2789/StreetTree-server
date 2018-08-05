@@ -46,6 +46,8 @@ final class FileResponder
                 . "; filename=\"$filename\""
                 . "; filename*=UTF-8\'\'$unicodeFilename")
             ->withHeader('Content-Length', $file->size)
+            // TODO: settings.fileStoragePath 혹은 filename에 절대경로 포함하기?
+            // @see https://github.com/ppy/osu-web/blob/master/app/Traits/Uploadable.php
             ->withBody(new Body(fopen(__DIR__ . '/../../../storage/files/' . $file->filename, 'rb')));
     }
 }
