@@ -9,7 +9,7 @@ use App\Entity\File;
 use App\Repository\UserRepository;
 use Slim\Http\UploadedFile;
 use Ramsey\Uuid\Uuid;
-use Slim\Container;
+use Psr\Container\ContainerInterface;
 
 final class FileUploadAction
 {
@@ -37,17 +37,17 @@ final class FileUploadAction
         EntityManager $em,
         FileResponder $responder,
         UserRepository $users,
-        Container $container
+        ContainerInterface $container
     ) {
         $this->em = $em;
         $this->responder = $responder;
         $this->users = $users;
-        $this->fileStorage = __DIR__ . '/../../../storage/files';
+        $this->fileStorage = $container->get('settings.fileStoragePath');
 
         ini_set('max_execution_time', 0);
     }
 
-    public function getUploadedFile($request): UploadedFile
+    public function getUploadedFile(Request $request): UploadedFile
     {
         return $request->getUploadedFiles()['file'];
     }
@@ -57,6 +57,10 @@ final class FileUploadAction
         $filename = Uuid::uuid4()->toString();
 
         $uploadedFile = $this->getUploadedFile($request);
+        if ($uploadedFile->getError() !== UPLOAD_ERR_OK) {
+            throw new \Exception('failed to upload');
+        }
+
         $filename .= '.' . pathinfo($uploadedFile->getClientFilename(), PATHINFO_EXTENSION);
         $uploadedFile->moveTo($this->fileStorage . '/' . $filename);
 
@@ -69,17 +73,17 @@ final class FileUploadAction
         $userId = $request->getAttribute(getenv('JWTAUTH_NAME'))['i'];
         $user = $this->users->find($userId);
 
-        $rootImage = new File();
-        $rootImage->checksum_crc32   = $checksum_crc32;
-        $rootImage->createdAt        = new \DateTime();
-        $rootImage->size             = $size;
-        $rootImage->mediaType        = $mediaType;
-        $rootImage->originalFilename = $originalFilename;
-        $rootImage->filename         = $filename;
-        $rootImage->owner            = $user;
-        $this->em->persist($rootImage);
+        $file = new File();
+        $file->checksum_crc32   = $checksum_crc32;
+        $file->createdAt        = new \DateTime();
+        $file->size             = $size;
+        $file->mediaType        = $mediaType;
+        $file->originalFilename = $originalFilename;
+        $file->filename         = $filename;
+        $file->owner            = $user;
+        $this->em->persist($file);
         $this->em->flush();
 
-        return $this->responder->success($response, $rootImage);
+        return $this->responder->success($response, $file);
     }
 }
