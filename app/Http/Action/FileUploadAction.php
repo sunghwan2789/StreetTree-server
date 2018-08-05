@@ -54,21 +54,23 @@ final class FileUploadAction
 
     public function __invoke(Request $request, Response $response)
     {
-        $filename = Uuid::uuid4()->toString();
-
         $uploadedFile = $this->getUploadedFile($request);
         if ($uploadedFile->getError() !== UPLOAD_ERR_OK) {
             throw new \Exception('failed to upload');
         }
 
-        $filename .= '.' . pathinfo($uploadedFile->getClientFilename(), PATHINFO_EXTENSION);
-        $uploadedFile->moveTo($this->fileStorage . '/' . $filename);
+        $stream = $uploadedFile->getStream();
 
-        $checksum_crc32   = hash_file('crc32b', $this->fileStorage . '/' . $filename);
+        $checksum_crc32   = hash_file('crc32b', $stream->getMetadata('uri'));
         $size             = $uploadedFile->getSize();
         $mediaType        = $uploadedFile->getClientMediaType();
         $originalFilename = $uploadedFile->getClientFilename();
+        $extension        = pathinfo($uploadedFile->getClientFilename(), PATHINFO_EXTENSION);
+        $filename         = Uuid::uuid4()->toString() . '.' . $extension;
 
+        $stream->close();
+
+        $uploadedFile->moveTo($this->fileStorage . '/' . $filename);
 
         $userId = $request->getAttribute(getenv('JWTAUTH_NAME'))['i'];
         $user = $this->users->find($userId);
