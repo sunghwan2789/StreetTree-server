@@ -23,11 +23,11 @@ class MeasuresetTransformer extends TransformerAbstract
 
     public function includeAuthor(Measureset $measureset)
     {
-        return $this->item($measureset->author, new UserTransformer);
+        return $this->item($measureset->author, new UserTransformer());
     }
 
     public function includeMeasures(Measureset $measureset)
     {
-        return $this->collection($measureset->measures, new MeasureTransformer);
+        return $this->collection($measureset->measures, new MeasureTransformer());
     }
 }

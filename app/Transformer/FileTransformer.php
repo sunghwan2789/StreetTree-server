@@ -27,6 +27,6 @@ class FileTransformer extends TransformerAbstract
 
     public function includeOwner(File $file)
     {
-        return $this->item($file->owner, new UserTransformer);
+        return $this->item($file->owner, new UserTransformer());
     }
 }

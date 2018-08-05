@@ -22,7 +22,7 @@ final class FileResponder
     public function success(Response $response, File $file)
     {
         return $response->withStatus(201)
-            ->withJson($this->transformer->item($file, new FileTransformer));
+            ->withJson($this->transformer->item($file, new FileTransformer()));
     }
 
     public function show(Response $response, File $file)
