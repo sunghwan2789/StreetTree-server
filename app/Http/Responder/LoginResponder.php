@@ -28,6 +28,7 @@ class LoginResponder
         $cookies = new Cookies();
         $cookies->set(getenv('JWTAUTH_NAME'), [
             'value'    => $token,
+            // TODO: 토큰 시간 설정
             'expires'  => time() + 72800,
             'httponly' => true,
             'secure'   => $this->cookieSecure,
