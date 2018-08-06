@@ -67,6 +67,7 @@ final class FileResponder
                 . "; filename*=UTF-8\'\'{$unicodeFilename}"
             );
 
+        // TODO: These are Action logics??
         if ($rangeUnit !== null && $rangeUnit->getRangeUnit() === 'bytes') {
             try {
                 $ranges = $rangeUnit->getRanges();
@@ -77,7 +78,7 @@ final class FileResponder
                 }
             } catch (NotSatisfiableException | ParseException $e) {
                 return $response->withStatus(416);
-            } catch (HttpRangeException $e) {}
+            }
         }
 
         return $this->sendFull($fileResponse, $stream, $file->size);
