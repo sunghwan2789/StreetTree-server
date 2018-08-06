@@ -32,7 +32,7 @@ class MeasuresetSearchAction
 
     public function __invoke(Request $request, Response $response)
     {
-        $siteNameQuery = $request->getParsedBodyParam('q');
+        $siteNameQuery = $request->getQueryParam('q');
         $measuresets = $this->measuresets->findBySiteName($siteNameQuery);
         return $this->responder->collection($response, $measuresets);
     }
