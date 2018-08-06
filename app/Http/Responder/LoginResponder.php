@@ -5,6 +5,8 @@ use Slim\Http\Response;
 use App\Entity\User;
 use App\Transformer\UserTransformer;
 use App\Service\Transformer;
+use Slim\Http\Cookies;
+use Psr\Container\ContainerInterface;
 
 class LoginResponder
 {
@@ -13,15 +15,26 @@ class LoginResponder
      */
     private $transformer;
 
-    public function __construct(Transformer $transformer)
+    private $cookieSecure;
+
+    public function __construct(Transformer $transformer, ContainerInterface $container)
     {
         $this->transformer = $transformer;
+        $this->cookieSecure = $container->get('settings.jwtauth')['secure'];
     }
 
     public function grant(Response $response, string $token, User $user): Response
     {
-        setcookie(getenv('JWTAUTH_NAME'), $token, time() + 72800, '/', '', false /* sync with settings.jwtauth.secure */, true);
+        $cookies = new Cookies();
+        $cookies->set(getenv('JWTAUTH_NAME'), [
+            'value'    => $token,
+            // TODO: 토큰 시간 설정
+            'expires'  => time() + 72800,
+            'httponly' => true,
+            'secure'   => $this->cookieSecure,
+        ]);
         return $response->withStatus(200)
+            ->withAddedHeader('Set-Cookie', $cookies->toHeaders())
             ->withJson($this->transformer->item($user, new UserTransformer()));
     }
 

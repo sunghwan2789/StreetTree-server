@@ -39,10 +39,6 @@ return [
         'secret'    => getenv('JWTAUTH_SECRET'),
     ],
 
-    App\Service\DumpService::class => function (ContainerInterface $c) {
-        return new App\Service\DumpService($c->get('settings.storagePath') . '/dump');
-    },
-
     Doctrine\ORM\EntityManager::class => function (ContainerInterface $c) {
         $settings = $c->get('settings.doctrine');
 

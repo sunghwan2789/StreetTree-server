@@ -17,7 +17,7 @@ class LoginAction
     /**
      * @var UserRepository
      */
-    private $repository;
+    private $users;
 
     /**
      * @var AuthService
@@ -26,11 +26,11 @@ class LoginAction
 
     public function __construct(
         LoginResponder $responder,
-        UserRepository $repository,
+        UserRepository $users,
         AuthService $auth
     ) {
         $this->responder = $responder;
-        $this->repository = $repository;
+        $this->users = $users;
         $this->auth = $auth;
     }
 
@@ -40,7 +40,7 @@ class LoginAction
         $password = $request->getParsedBodyParam('pw');
 
         // FIXME: $username 자료형이 array이면 여러 아이디를 한번에 질의함
-        $user = $this->repository->findOneByUsername($username);
+        $user = $this->users->findOneByUsername($username);
         if ($user === null) {
             return $this->responder->userNotFound($response);
         }

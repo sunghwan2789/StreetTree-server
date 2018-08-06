@@ -6,8 +6,6 @@ $dotenv->load();
 
 $app = new App\Http\Kernel();
 
-$app->any('/', App\Http\Action\HomeAction::class);
-$app->get('/dump', App\Http\Action\DumpAction::class);
 $app->post('/login', App\Http\Action\LoginAction::class);
 $app->post('/upload', App\Http\Action\FileUploadAction::class);
 $app->post('/measureset/new', App\Http\Action\MeasuresetPostAction::class);

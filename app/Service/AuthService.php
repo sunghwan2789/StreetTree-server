@@ -13,11 +13,11 @@ class AuthService
     /**
      * @var UserRepository
      */
-    private $repository;
+    private $users;
 
-    public function __construct(UserRepository $repository)
+    public function __construct(UserRepository $users)
     {
-        $this->repository = $repository;
+        $this->users = $users;
     }
 
     /**
@@ -43,6 +43,7 @@ class AuthService
     public function issueToken(User $user): string
     {
         $issuedAt = new DateTime();
+        // TODO: 토큰 시간 설정
         $expiresAt = new DateTime('+1 day');
         return JWT::encode([
             'iat' => $issuedAt->getTimestamp(),
