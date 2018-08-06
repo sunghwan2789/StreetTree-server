@@ -14,6 +14,10 @@ use Ramsey\Http\Range\Unit\UnitRangeInterface;
 use GuzzleHttp\Psr7\LimitStream;
 use GuzzleHttp\Psr7\LazyOpenStream;
 use Psr\Http\Message\StreamInterface;
+use Ramsey\Http\Range\Exception\NotSatisfiableException;
+use Ramsey\Http\Range\Exception\ParseException;
+use Psr\Container\ContainerInterface;
+use Ramsey\Http\Range\Exception\HttpRangeException;
 
 final class FileResponder
 {
@@ -22,9 +26,12 @@ final class FileResponder
      */
     private $transformer;
 
-    public function __construct(Transformer $transformer)
+    private $fileStorage;
+
+    public function __construct(Transformer $transformer, ContainerInterface $container)
     {
         $this->transformer = $transformer;
+        $this->fileStorage = $container->get('settings.fileStoragePath');
     }
 
     public function success(Response $response, File $file)
@@ -49,11 +56,10 @@ final class FileResponder
 
         $filename = $file->originalFilename;
         $unicodeFilename = rawurlencode($file->originalFilename);
-        // TODO: settings.fileStoragePath 혹은 filename에 절대경로 포함하기?
-        // @see https://github.com/ppy/osu-web/blob/master/app/Traits/Uploadable.php
-        $stream = new LazyOpenStream(__DIR__ . '/../../../storage/files/' . $file->filename, 'rb');
+        $stream = new LazyOpenStream($this->fileStorage . '/' . $file->filename, 'rb');
 
-        $response = $response->withHeader('Accept-Ranges', 'bytes')
+        $fileResponse = $response->withHeader('Accept-Ranges', 'bytes')
+            ->withHeader('Content-Type', $file->mediaType)
             ->withHeader(
                 'Content-Disposition',
                 $dispositionType
@@ -62,27 +68,31 @@ final class FileResponder
             );
 
         if ($rangeUnit !== null && $rangeUnit->getRangeUnit() === 'bytes') {
-            $ranges = $rangeUnit->getRanges();
-            if (count($ranges) == 1) {
-                return $this->sendRange($response, $file, $stream, $ranges[0]);
-            }
+            try {
+                $ranges = $rangeUnit->getRanges();
+                // 처리 가능한 Range request만 처리하고
+                // 나머지는 무시하여 파일 전체 데이터 전송
+                if (count($ranges) == 1) {
+                    return $this->sendRange($fileResponse, $stream, $ranges[0]);
+                }
+            } catch (NotSatisfiableException | ParseException $e) {
+                return $response->withStatus(416);
+            } catch (HttpRangeException $e) {}
         }
 
-        return $this->sendFull($response, $file, $stream);
+        return $this->sendFull($fileResponse, $stream, $file->size);
     }
 
-    private function sendFull(Response $response, File $file, StreamInterface $stream)
+    private function sendFull(Response $response, StreamInterface $stream, $size)
     {
         return $response->withStatus(200)
-            ->withHeader('Content-Type', $file->mediaType)
-            ->withHeader('Content-Length', $file->size)
+            ->withHeader('Content-Length', $size)
             ->withBody($stream);
     }
 
-    private function sendRange(Response $response, File $file, StreamInterface $stream, UnitRangeInterface $range)
+    private function sendRange(Response $response, StreamInterface $stream, UnitRangeInterface $range)
     {
         return $response->withStatus(206)
-            ->withHeader('Content-Type', $file->mediaType)
             ->withHeader('Content-Length', $range->getLength())
             ->withHeader(
                 'Content-Range',
