@@ -9,6 +9,8 @@ use App\Entity\File;
 use App\Repository\UserRepository;
 use App\Repository\FileRepository;
 use App\Repository\MeasureRepository;
+use Ramsey\Http\Range\Range;
+use Ramsey\Http\Range\Exception\NoRangeException;
 
 final class RootImageDownloadAction
 {
@@ -47,6 +49,12 @@ final class RootImageDownloadAction
     public function __invoke($measure_id, Request $request, Response $response)
     {
         $rootImage = $this->measures->find($measure_id)->rootImage;
-        return $this->responder->show($response, $rootImage);
+        $range = new Range($request, $rootImage->size);
+        try {
+            $rangeUnit = $range->getUnit();
+            return $this->responder->show($response, $rootImage, $rangeUnit);
+        } catch (NoRangeException $e) {
+            return $this->responder->show($response, $rootImage, null);
+        }
     }
 }

@@ -6,6 +6,14 @@ use App\Entity\File;
 use Slim\Http\Body;
 use App\Service\Transformer;
 use App\Transformer\FileTransformer;
+use Ramsey\Http\Range\Range;
+use Ramsey\Http\Range\Exception\NoRangeException;
+use Ramsey\Http\Range\Unit\UnitInterface;
+use Slim\Http\Stream;
+use Ramsey\Http\Range\Unit\UnitRangeInterface;
+use GuzzleHttp\Psr7\LimitStream;
+use GuzzleHttp\Psr7\LazyOpenStream;
+use Psr\Http\Message\StreamInterface;
 
 final class FileResponder
 {
@@ -25,31 +33,55 @@ final class FileResponder
             ->withJson($this->transformer->item($file, new FileTransformer()));
     }
 
-    public function show(Response $response, File $file)
+    public function show(Response $response, File $file, ?UnitInterface $rangeUnit)
     {
-        return $this->send($response, $file, 'inline');
+        return $this->send($response, $file, 'inline', $rangeUnit);
     }
 
-    public function download(Response $response, File $file)
+    public function download(Response $response, File $file, ?UnitInterface $rangeUnit)
     {
-        return $this->send($rseponse, $file, 'attachment');
+        return $this->send($rseponse, $file, 'attachment', $rangeUnit);
     }
 
-    private function send(Response $response, File $file, string $dispositionType)
+    private function send(Response $response, File $file, string $dispositionType, ?UnitInterface $rangeUnit)
     {
         set_time_limit(0);
 
         $filename = $file->originalFilename;
         $unicodeFilename = rawurlencode($file->originalFilename);
-        // TODO: 206 상태 코드 지원하기
+        // TODO: settings.fileStoragePath 혹은 filename에 절대경로 포함하기?
+        // @see https://github.com/ppy/osu-web/blob/master/app/Traits/Uploadable.php
+        $stream = new LazyOpenStream(__DIR__ . '/../../../storage/files/' . $file->filename, 'rb');
+
+        $response = $response->withHeader('Accept-Ranges', 'bytes')
+            ->withHeader(
+                'Content-Disposition',
+                $dispositionType
+                . "; filename=\"{$filename}\""
+                . "; filename*=UTF-8\'\'{$unicodeFilename}"
+            );
+
+        if ($rangeUnit === null || $rangeUnit->getRangeUnit() !== 'bytes') {
+            return $this->sendFull($response, $file, $stream);
+        }
+
+        [$range] = $rangeUnit->getRanges();
+        return $this->sendRange($response, $file, $stream, $range);
+    }
+
+    private function sendFull(Response $response, File $file, StreamInterface $stream)
+    {
         return $response->withStatus(200)
             ->withHeader('Content-Type', $file->mediaType)
-            ->withHeader('Content-Disposition', $dispositionType
-                . "; filename=\"$filename\""
-                . "; filename*=UTF-8\'\'$unicodeFilename")
             ->withHeader('Content-Length', $file->size)
-            // TODO: settings.fileStoragePath 혹은 filename에 절대경로 포함하기?
-            // @see https://github.com/ppy/osu-web/blob/master/app/Traits/Uploadable.php
-            ->withBody(new Body(fopen(__DIR__ . '/../../../storage/files/' . $file->filename, 'rb')));
+            ->withBody($stream);
+    }
+
+    private function sendRange(Response $response, File $file, StreamInterface $stream, UnitRangeInterface $range)
+    {
+        return $response->withStatus(206)
+            ->withHeader('Content-Type', $file->mediaType)
+            ->withHeader('Content-Length', $range->getLength())
+            ->withBody(new LimitStream($stream, $range->getLength(), $range->getStart()));
     }
 }
