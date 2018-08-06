@@ -76,9 +76,9 @@ final class FileResponder
                 if (count($ranges) == 1) {
                     return $this->sendRange($fileResponse, $stream, $ranges[0]);
                 }
-            } catch (NotSatisfiableException | ParseException $e) {
+            } catch (NotSatisfiableException $e) {
                 return $response->withStatus(416);
-            }
+            } catch (HttpRangeException $e) {}
         }
 
         return $this->sendFull($fileResponse, $stream, $file->size);

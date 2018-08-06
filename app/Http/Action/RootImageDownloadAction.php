@@ -50,13 +50,13 @@ final class RootImageDownloadAction
     public function __invoke($measure_id, Request $request, Response $response)
     {
         $rootImage = $this->measures->find($measure_id)->rootImage;
+        $rangeUnit = null;
         if ($request->hasHeader('Range')) {
             try {
                 $rangeRequest = new Range($request, $rootImage->size);
                 $rangeUnit = $rangeRequest->getUnit();
-                return $this->responder->show($response, $rootImage, $rangeUnit);
             } catch (HttpRangeException $e) {}
         }
-        return $this->responder->show($response, $rootImage, null);
+        return $this->responder->show($response, $rootImage, $rangeUnit);
     }
 }
