@@ -49,12 +49,13 @@ final class RootImageDownloadAction
     public function __invoke($measure_id, Request $request, Response $response)
     {
         $rootImage = $this->measures->find($measure_id)->rootImage;
-        $range = new Range($request, $rootImage->size);
-        try {
-            $rangeUnit = $range->getUnit();
-            return $this->responder->show($response, $rootImage, $rangeUnit);
-        } catch (NoRangeException $e) {
-            return $this->responder->show($response, $rootImage, null);
+        if ($request->hasHeader('Range')) {
+            try {
+                $range = new Range($request, $rootImage->size);
+                $rangeUnit = $range->getUnit();
+                return $this->responder->show($response, $rootImage, $rangeUnit);
+            } catch (NoRangeException $e) {}
         }
+        return $this->responder->show($response, $rootImage, null);
     }
 }

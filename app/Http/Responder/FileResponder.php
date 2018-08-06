@@ -61,12 +61,14 @@ final class FileResponder
                 . "; filename*=UTF-8\'\'{$unicodeFilename}"
             );
 
-        if ($rangeUnit === null || $rangeUnit->getRangeUnit() !== 'bytes') {
-            return $this->sendFull($response, $file, $stream);
+        if ($rangeUnit !== null && $rangeUnit->getRangeUnit() === 'bytes') {
+            $ranges = $rangeUnit->getRanges();
+            if (count($ranges) == 1) {
+                return $this->sendRange($response, $file, $stream, $ranges[0]);
+            }
         }
 
-        [$range] = $rangeUnit->getRanges();
-        return $this->sendRange($response, $file, $stream, $range);
+        return $this->sendFull($response, $file, $stream);
     }
 
     private function sendFull(Response $response, File $file, StreamInterface $stream)
@@ -82,6 +84,10 @@ final class FileResponder
         return $response->withStatus(206)
             ->withHeader('Content-Type', $file->mediaType)
             ->withHeader('Content-Length', $range->getLength())
+            ->withHeader(
+                'Content-Range',
+                'bytes ' . $range->getStart() . '-' . $range->getEnd() . '/' . $range->getTotalSize()
+            )
             ->withBody(new LimitStream($stream, $range->getLength(), $range->getStart()));
     }
 }
