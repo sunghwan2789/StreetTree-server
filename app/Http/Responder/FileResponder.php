@@ -37,6 +37,8 @@ final class FileResponder
 
     private function send(Response $response, File $file, string $dispositionType)
     {
+        set_time_limit(0);
+
         $filename = $file->originalFilename;
         $unicodeFilename = rawurlencode($file->originalFilename);
         // TODO: 206 상태 코드 지원하기
