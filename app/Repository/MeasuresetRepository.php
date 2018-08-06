@@ -46,7 +46,7 @@ final class MeasuresetRepository
     {
         $qb = $this->repository->createQueryBuilder('s')
             ->where('s.siteName LIKE :siteName')
-            ->setParameter('siteName', "%$siteName%");
+            ->setParameter('siteName', "%{$siteName}%");
         return $qb->getQuery()->getResult();
     }
 }
