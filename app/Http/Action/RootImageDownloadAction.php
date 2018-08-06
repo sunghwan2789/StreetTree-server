@@ -51,8 +51,8 @@ final class RootImageDownloadAction
         $rootImage = $this->measures->find($measure_id)->rootImage;
         if ($request->hasHeader('Range')) {
             try {
-                $range = new Range($request, $rootImage->size);
-                $rangeUnit = $range->getUnit();
+                $rangeRequest = new Range($request, $rootImage->size);
+                $rangeUnit = $rangeRequest->getUnit();
                 return $this->responder->show($response, $rootImage, $rangeUnit);
             } catch (NoRangeException $e) {}
         }
