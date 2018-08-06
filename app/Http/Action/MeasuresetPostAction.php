@@ -62,6 +62,7 @@ class MeasuresetPostAction
 
         foreach ($request->getParsedBodyParam('list') as $item) {
             $rootImage = null;
+            // FIXME: Undefined index after Gson serialization
             if ($item['rootImageId'] !== null) {
                 // FIXME: [ "id" => 1 ] 등으로도 질의 가능
                 $rootImage = $this->files->find($item['rootImageId']);
