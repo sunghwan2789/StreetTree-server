@@ -54,17 +54,19 @@ final class FileResponder
     {
         set_time_limit(0);
 
-        $filename = $file->originalFilename;
-        $unicodeFilename = rawurlencode($file->originalFilename);
+        $encodedFilename = rawurlencode($file->originalFilename);
         $stream = new LazyOpenStream($this->fileStorage . '/' . $file->filename, 'rb');
 
         $fileResponse = $response->withHeader('Accept-Ranges', 'bytes')
             ->withHeader('Content-Type', $file->mediaType)
+            // https://tools.ietf.org/html/rfc6266
             ->withHeader(
                 'Content-Disposition',
                 $dispositionType
-                . "; filename=\"{$filename}\""
-                . "; filename*=UTF-8\'\'{$unicodeFilename}"
+                // FOR IE8 and etc.
+                . "; filename=\"{$encodedFilename}\""
+                // FOR modern web browsers.
+                . "; filename*=UTF-8''{$encodedFilename}"
             );
 
         // TODO: These are Action logics??
