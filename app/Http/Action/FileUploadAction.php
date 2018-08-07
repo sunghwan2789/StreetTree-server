@@ -10,6 +10,7 @@ use App\Repository\UserRepository;
 use Slim\Http\UploadedFile;
 use Ramsey\Uuid\Uuid;
 use Psr\Container\ContainerInterface;
+use function GuzzleHttp\Psr7\hash;
 
 final class FileUploadAction
 {
@@ -44,7 +45,7 @@ final class FileUploadAction
         $this->users = $users;
         $this->fileStorage = $container->get('settings.fileStoragePath');
 
-        ini_set('max_execution_time', 0);
+        set_time_limit(0);
     }
 
     public function getUploadedFile(Request $request): UploadedFile
@@ -61,7 +62,7 @@ final class FileUploadAction
 
         $stream = $uploadedFile->getStream();
 
-        $checksum_crc32   = hash_file('crc32b', $stream->getMetadata('uri'));
+        $checksum_crc32   = hash($stream, 'crc32b');
         $size             = $uploadedFile->getSize();
         $mediaType        = $uploadedFile->getClientMediaType();
         $originalFilename = $uploadedFile->getClientFilename();
