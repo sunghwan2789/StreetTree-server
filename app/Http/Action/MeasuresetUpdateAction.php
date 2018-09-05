@@ -88,6 +88,7 @@ class MeasuresetUpdateAction
             }
             if ($measure === null) {
                 $measure = new Measure();
+                $this->em->persist($measure);
             }
 
             $rootImage = null;
@@ -116,8 +117,6 @@ class MeasuresetUpdateAction
             $measure->rootImage      = $rootImage;
             $measure->measureset     = $measureset;
             $newMeasures[] = $measure;
-
-            $this->em->persist($measure);
         }
 
         $newMeasureIds = array_map(function (Measure $measure) { return $measure->id; }, $newMeasures);
