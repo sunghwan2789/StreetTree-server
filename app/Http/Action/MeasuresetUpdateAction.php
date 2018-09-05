@@ -82,9 +82,12 @@ class MeasuresetUpdateAction
 
         $newMeasures = [];
         foreach ($request->getParsedBodyParam('list') as $item) {
-            $measure = new Measure();
+            $measure = null;
             if ($item['measure_id'] !== null) {
                 $measure = $this->measures->find($item['measure_id']);
+            }
+            if ($measure === null) {
+                $measure = new Measure();
             }
 
             $rootImage = null;
