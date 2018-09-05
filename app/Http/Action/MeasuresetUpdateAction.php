@@ -13,6 +13,7 @@ use App\Http\Responder\MeasuresetResponder;
 use App\Repository\MeasuresetRepository;
 use App\Repository\MeasureRepository;
 use Slim\Route;
+use App\Repository\PlateRepository;
 
 class MeasuresetUpdateAction
 {
@@ -46,13 +47,19 @@ class MeasuresetUpdateAction
      */
     private $measures;
 
+    /**
+     * @var PlateRepository
+     */
+    private $plates;
+
     public function __construct(
         EntityManager $em,
         MeasuresetResponder $responder,
         UserRepository $users,
         FileRepository $files,
         MeasuresetRepository $measuresets,
-        MeasureRepository $measures
+        MeasureRepository $measures,
+        PlateRepository $plates
     ) {
         $this->em = $em;
         $this->responder = $responder;
@@ -60,6 +67,7 @@ class MeasuresetUpdateAction
         $this->files = $files;
         $this->measuresets = $measuresets;
         $this->measures = $measures;
+        $this->plates = $plates;
     }
 
     public function __invoke(Request $request, Response $response, Route $route)
@@ -102,13 +110,18 @@ class MeasuresetUpdateAction
                 $rootImage = $measure->rootImage;
             }
 
+            $plate = null;
+            if ($item['plate_id'] !== null) {
+                $plate = $this->plates->find($item['plate_id']);
+            }
+
             $measure->sequenceNumber = $item['sequenceNumber'];
             $measure->latitude       = $item['latitude'];
             $measure->longitude      = $item['longitude'];
             $measure->siCode         = $item['sido'];
             $measure->guCode         = $item['goon'];
             $measure->dongCode       = $item['gu'];
-            $measure->plateName      = $item['plateName'];
+            $measure->plate          = $plate;
             $measure->treeNumber     = $item['treeNumber'];
             $measure->isInstalled    = $item['isInstalled'];
             $measure->points         = $item['points'];

@@ -11,6 +11,10 @@ class MeasureTransformer extends TransformerAbstract
         'measureset',
     ];
 
+    protected $defaultIncludes = [
+        'plate',
+    ];
+
     public function transform(Measure $measure)
     {
         return [
@@ -26,7 +30,6 @@ class MeasureTransformer extends TransformerAbstract
                 'guCode'     => $measure->guCode,
                 'dongCode'   => $measure->dongCode,
             ],
-            'plateName'      => $measure->plateName,
             'treeNumber'     => $measure->treeNumber,
             'isInstalled'    => $measure->isInstalled,
             'points'         => $measure->points,
@@ -36,5 +39,13 @@ class MeasureTransformer extends TransformerAbstract
             'treeLocation'   => $measure->treeLocation,
             'memo'           => $measure->memo,
         ];
+    }
+
+    public function includePlate(Measure $measure)
+    {
+        if ($measure->plate === null) {
+            return $this->null();
+        }
+        return $this->item($measure->plate, new PlateTransformer());
     }
 }
