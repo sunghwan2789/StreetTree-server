@@ -33,7 +33,7 @@ class Plate
     public $length;
 
     /**
-     * @var int 내경
+     * @var int|null 내경
      *
      * @ORM\Column(type="integer", nullable=true)
      */
