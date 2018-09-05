@@ -57,8 +57,8 @@ class MeasuresetPostAction
         $measureset->clientName     = $request->getParsedBodyParam('clientName');
         $measureset->createdAt      = new \DateTime($request->getParsedBodyParam('createdAt'));
         $measureset->author         = $user;
-        $measureset->salespersonName = $request->getParsedBodyParam('salespersonName');
-        $measureset->deliveryTarget  = $request->getParsedBodyParam('deliveryTarget');
+        $measureset->salespersonName = $request->getParsedBodyParam('salespersonName') ?: '';
+        $measureset->deliveryTarget  = $request->getParsedBodyParam('deliveryTarget') ?: '';
         $measureset->deliveryDate    = new \DateTime($request->getParsedBodyParam('deliveryDate'));
         $measureset->differenceValue = intval($request->getParsedBodyParam('differenceValue'));
         $this->em->persist($measureset);
