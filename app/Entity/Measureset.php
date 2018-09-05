@@ -54,5 +54,34 @@ class Measureset
      */
     public $measures;
 
+    /**
+     * @var string 영업담당자 이름
+     *
+     * @ORM\Column(type="text")
+     */
+    public $salespersonName;
+
+    /**
+     * @var string 납품대상
+     *
+     * 대상이 관급인지 사급인지 구분하는 값
+     *
+     * @ORM\Column(type="text")
+     */
+    public $deliveryTarget;
+
+    /**
+     * @var \DateTime 납품예정일
+     *
+     * @ORM\Column(type="date")
+     */
+    public $deliveryDate;
+
+    /**
+     * @var int 공차값
+     *
+     * @ORM\Column(type="integer")
+     */
+    public $differenceValue;
 
 }

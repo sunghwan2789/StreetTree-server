@@ -103,5 +103,18 @@ class Measure
      */
     public $measureset;
 
+    /**
+     * @var string|null 현장 수목 위치
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    public $treeLocation;
+
+    /**
+     * @var string|null 메모
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    public $memo;
 
 }
