@@ -12,6 +12,7 @@ use App\Repository\FileRepository;
 use App\Http\Responder\MeasuresetResponder;
 use App\Repository\MeasuresetRepository;
 use App\Repository\MeasureRepository;
+use Slim\Route;
 
 class MeasuresetUpdateAction
 {
@@ -61,14 +62,14 @@ class MeasuresetUpdateAction
         $this->measures = $measures;
     }
 
-    public function __invoke(Request $request, Response $response)
+    public function __invoke(Request $request, Response $response, Route $route)
     {
         $this->em->beginTransaction();
 
         $userId = $request->getAttribute(getenv('JWTAUTH_NAME'))['i'];
         $user   = $this->users->find($userId);
 
-        $measureset = $this->measuresets->find($request->getParsedBodyParam('measureset_id'));
+        $measureset = $this->measuresets->find($route->getArgument('measureset_id'));
         $measureset->siteName       = $request->getParsedBodyParam('siteName');
         $measureset->clientName     = $request->getParsedBodyParam('clientName');
         $measureset->createdAt      = new \DateTime($request->getParsedBodyParam('createdAt'));
@@ -123,6 +124,7 @@ class MeasuresetUpdateAction
         foreach ($obsoletedMeasures as $measure) {
             $this->em->remove($measure);
         }
+        $measureset->measures = $newMeasures;
         $this->em->flush();
 
         $this->em->commit();
