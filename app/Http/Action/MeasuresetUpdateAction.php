@@ -82,7 +82,10 @@ class MeasuresetUpdateAction
 
         $newMeasures = [];
         foreach ($request->getParsedBodyParam('list') as $item) {
-            $measure = $this->measures->find($item['measure_id']);
+            $measure = new Measure();
+            if ($item['measure_id'] !== null) {
+                $measure = $this->measures->find($item['measure_id']);
+            }
 
             $rootImage = null;
             // FIXME: Undefined index after Gson serialization
@@ -95,9 +98,6 @@ class MeasuresetUpdateAction
                 $rootImage = $measure->rootImage;
             }
 
-            if ($measure === null) {
-                $measure = new Measure();
-            }
             $measure->sequenceNumber = $item['sequenceNumber'];
             $measure->latitude       = $item['latitude'];
             $measure->longitude      = $item['longitude'];
