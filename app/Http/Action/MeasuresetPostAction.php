@@ -10,6 +10,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Repository\FileRepository;
 use App\Http\Responder\MeasuresetResponder;
+use App\Repository\PlateRepository;
 
 class MeasuresetPostAction
 {
@@ -33,16 +34,23 @@ class MeasuresetPostAction
      */
     private $files;
 
+    /**
+     * @var PlateRepository
+     */
+    private $plates;
+
     public function __construct(
         EntityManager $em,
         MeasuresetResponder $responder,
         UserRepository $users,
-        FileRepository $files
+        FileRepository $files,
+        PlateRepository $plates
     ) {
         $this->em = $em;
         $this->responder = $responder;
         $this->users = $users;
         $this->files = $files;
+        $this->plates = $plates;
     }
 
     public function __invoke(Request $request, Response $response)
@@ -72,6 +80,11 @@ class MeasuresetPostAction
                 $rootImage = $this->files->find($item['rootImageId']);
             }
 
+            $plate = null;
+            if ($item['plate_id'] !== null) {
+                $plate = $this->plates->find($item['plate_id']);
+            }
+
             $measure = new Measure();
             $measure->sequenceNumber = $item['sequenceNumber'];
             $measure->latitude       = $item['latitude'];
@@ -79,7 +92,7 @@ class MeasuresetPostAction
             $measure->siCode         = $item['sido'];
             $measure->guCode         = $item['goon'];
             $measure->dongCode       = $item['gu'];
-            $measure->plateName      = $item['plateName'];
+            $measure->plate          = $plate;
             $measure->treeNumber     = $item['treeNumber'];
             $measure->isInstalled    = $item['isInstalled'];
             $measure->points         = $item['points'];

@@ -62,11 +62,11 @@ class Measure
     public $dongCode;
 
     /**
-     * @var string|null 보호판 이름?
+     * @var Plate 보호판
      *
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Plate")
      */
-    public $plateName;
+    public $plate;
 
     /**
      * @var string|null 수목 번호
