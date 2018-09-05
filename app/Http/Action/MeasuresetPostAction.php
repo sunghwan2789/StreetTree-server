@@ -57,6 +57,10 @@ class MeasuresetPostAction
         $measureset->clientName     = $request->getParsedBodyParam('clientName');
         $measureset->createdAt      = new \DateTime($request->getParsedBodyParam('createdAt'));
         $measureset->author         = $user;
+        $measureset->salespersonName = $request->getParsedBodyParam('salespersonName');
+        $measureset->deliveryTarget  = $request->getParsedBodyParam('deliveryTarget');
+        $measureset->deliveryDate    = new \DateTime($request->getParsedBodyParam('deliveryDate'));
+        $measureset->differenceValue = intval($request->getParsedBodyParam('differenceValue'));
         $this->em->persist($measureset);
         $this->em->flush();
 
@@ -79,6 +83,8 @@ class MeasuresetPostAction
             $measure->treeNumber     = $item['treeNumber'];
             $measure->isInstalled    = $item['isInstalled'];
             $measure->points         = $item['points'];
+            $measure->treeLocation   = $item['treeLocation'];
+            $measure->memo           = $item['memo'];
             $measure->rootImage      = $rootImage;
             $measure->measureset     = $measureset;
             $measureset->measures[] = $measure;

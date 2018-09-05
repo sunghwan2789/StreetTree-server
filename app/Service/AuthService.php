@@ -44,10 +44,10 @@ class AuthService
     {
         $issuedAt = new DateTime();
         // TODO: 토큰 시간 설정
-        $expiresAt = new DateTime('+1 day');
+        // $expiresAt = new DateTime('+1 day');
         return JWT::encode([
             'iat' => $issuedAt->getTimestamp(),
-            'exp' => $expiresAt->getTimestamp(),
+            // 'exp' => $expiresAt->getTimestamp(),
             'i' => $user->id,
             'n' => $user->fullName,
         ], getenv('JWTAUTH_SECRET'));

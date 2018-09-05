@@ -33,6 +33,8 @@ class MeasureTransformer extends TransformerAbstract
             'rootImageUrl'   => $measure->rootImage !== null
                 ? '/measure/' . $measure->id . '/root-image'
                 : null,
+            'treeLocation'   => $measure->treeLocation,
+            'memo'           => $measure->memo,
         ];
     }
 }

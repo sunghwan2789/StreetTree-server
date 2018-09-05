@@ -18,6 +18,10 @@ class MeasuresetTransformer extends TransformerAbstract
             'siteName'      => $measureset->siteName,
             'clientName'    => $measureset->clientName,
             'createdAt'     => $measureset->createdAt->format('Y-m-d'),
+            'salespersonName' => $measureset->salespersonName,
+            'deliveryTarget'  => $measureset->deliveryTarget,
+            'deliveryDate'    => $measureset->deliveryDate->format('Y-m-d'),
+            'differenceValue' => $measureset->differenceValue,
         ];
     }
 
