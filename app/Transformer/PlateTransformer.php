@@ -19,7 +19,7 @@ class PlateTransformer extends TransformerAbstract
             'innerDiameter' => $plate->innerDiameter,
             'height'        => $plate->height,
             'attachmentUrl' => $plate->attachment
-                ? '/files/' . $plate->id
+                ? '/files/' . $plate->attachment->id
                 : null,
         ];
     }
