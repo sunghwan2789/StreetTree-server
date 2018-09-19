@@ -18,11 +18,22 @@ class PlateTransformer extends TransformerAbstract
             'length'        => $plate->length,
             'innerDiameter' => $plate->innerDiameter,
             'height'        => $plate->height,
+            'attachmentUrl' => $plate->attachment
+                ? '/files/' . $plate->attachment->id
+                : null,
         ];
     }
 
     public function includeFrame(Plate $plate)
     {
         return $this->item($plate->frame, new FrameTransformer());
+    }
+
+    public function includeAttachment(Plate $plate)
+    {
+        if ($plate->attachment == null) {
+            return $this->null();
+        }
+        return $this->item($plate->attachment, new FileTransformer());
     }
 }

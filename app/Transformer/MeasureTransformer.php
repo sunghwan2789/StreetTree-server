@@ -34,7 +34,7 @@ class MeasureTransformer extends TransformerAbstract
             'isInstalled'    => $measure->isInstalled,
             'points'         => $measure->points,
             'rootImageUrl'   => $measure->rootImage !== null
-                ? '/measure/' . $measure->id . '/root-image'
+                ? '/files/' . $measure->rootImage->id
                 : null,
             'treeLocation'   => $measure->treeLocation,
             'memo'           => $measure->memo,
