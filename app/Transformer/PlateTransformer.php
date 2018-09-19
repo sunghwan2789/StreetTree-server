@@ -8,7 +8,6 @@ class PlateTransformer extends TransformerAbstract
 {
     protected $defaultIncludes = [
         'frame',
-        'attachment',
     ];
 
     public function transform(Plate $plate)
@@ -19,6 +18,9 @@ class PlateTransformer extends TransformerAbstract
             'length'        => $plate->length,
             'innerDiameter' => $plate->innerDiameter,
             'height'        => $plate->height,
+            'attachmentUrl' => $plate->attachment
+                ? '/files/' . $plate->id
+                : null,
         ];
     }
 
