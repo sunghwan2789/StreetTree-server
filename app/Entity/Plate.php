@@ -53,4 +53,11 @@ class Plate
      */
     public $frame;
 
+    /**
+     * @var \App\Entity\File 첨부 파일
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\File")
+     */
+    public $attachment;
+
 }

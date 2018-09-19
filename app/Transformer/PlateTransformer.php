@@ -8,6 +8,7 @@ class PlateTransformer extends TransformerAbstract
 {
     protected $defaultIncludes = [
         'frame',
+        'attachment',
     ];
 
     public function transform(Plate $plate)
@@ -24,5 +25,13 @@ class PlateTransformer extends TransformerAbstract
     public function includeFrame(Plate $plate)
     {
         return $this->item($plate->frame, new FrameTransformer());
+    }
+
+    public function includeAttachment(Plate $plate)
+    {
+        if ($plate->attachment == null) {
+            return $this->null();
+        }
+        return $this->item($plate->attachment, new FileTransformer());
     }
 }
