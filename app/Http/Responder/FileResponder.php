@@ -47,7 +47,7 @@ final class FileResponder
 
     public function download(Response $response, File $file, ?UnitInterface $rangeUnit)
     {
-        return $this->send($rseponse, $file, 'attachment', $rangeUnit);
+        return $this->send($response, $file, 'attachment', $rangeUnit);
     }
 
     private function send(Response $response, File $file, string $dispositionType, ?UnitInterface $rangeUnit)

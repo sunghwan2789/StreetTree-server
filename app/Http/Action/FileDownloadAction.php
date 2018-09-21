@@ -50,6 +50,6 @@ final class FileDownloadAction
                 $rangeUnit = $rangeRequest->getUnit();
             } catch (HttpRangeException $e) {}
         }
-        return $this->responder->show($response, $file, $rangeUnit);
+        return $this->responder->download($response, $file, $rangeUnit);
     }
 }
