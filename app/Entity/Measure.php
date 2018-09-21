@@ -117,4 +117,11 @@ class Measure
      */
     public $memo;
 
+    /**
+     * @var \App\Entity\File 첨부 파일
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\File")
+     */
+    public $attachment;
+
 }

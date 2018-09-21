@@ -110,6 +110,17 @@ class MeasuresetUpdateAction
                 $rootImage = $measure->rootImage;
             }
 
+            $attachment = null;
+            // FIXME: Undefined index after Gson serialization
+            if ($item['attachment_id'] !== null) {
+                // FIXME: [ "id" => 1 ] 등으로도 질의 가능
+                $attachment = $this->files->find($item['attachment_id']);
+            }
+            // 수목 뿌리 사진 갱신 안하면 기존 사진 사용
+            if ($attachment === null) {
+                $attachment = $measure->attachment;
+            }
+
             $plate = null;
             if ($item['plate_id'] !== null) {
                 $plate = $this->plates->find($item['plate_id']);
@@ -128,6 +139,7 @@ class MeasuresetUpdateAction
             $measure->treeLocation   = $item['treeLocation'];
             $measure->memo           = $item['memo'];
             $measure->rootImage      = $rootImage;
+            $measure->attachment     = $attachment;
             $measure->measureset     = $measureset;
             $newMeasures[] = $measure;
         }

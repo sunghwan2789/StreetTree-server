@@ -38,6 +38,9 @@ class MeasureTransformer extends TransformerAbstract
                 : null,
             'treeLocation'   => $measure->treeLocation,
             'memo'           => $measure->memo,
+            'attachmentUrl'  => $measure->attachment !== null
+                ? '/files/' . $measure->attachment->id
+                : null,
         ];
     }
 
